@@ -23,5 +23,5 @@ notifications as such and the two counts differ.
 | `functional_location` | VARCHAR | where the work is ([keys.md](keys.md)); a whole plant on 641 rows |
 | `main_work_center` | VARCHAR | the work center responsible: 225 values, plain numbers (`3211`) or names (`64MAINT`, `43PUMP`); empty on 6 rows |
 | `required_start_date` | DATE | the required start; 3 rows before 2000 are not real dates |
-| `plant` | VARCHAR | the plant, sometimes with a department letter (`65E`, `65I`); empty on 3,887 rows — use the plant rule of [keys.md](keys.md#plant) |
+| `plant` | VARCHAR | the plant; a department letter (`65E`, `65I`) marks a synthetic plant that is left out of plant 65; empty on 3,887 rows — use the plant rule of [keys.md](keys.md#plant) |
 | `reference_date` | DATE | undocumented; one row reads 9202-12-15 |

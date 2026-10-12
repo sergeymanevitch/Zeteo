@@ -30,8 +30,9 @@ fails, fix it and run it again; do not fall back to a guess.
   on `date`. Use a half-open range: `created_on >= DATE '2026-05-01' AND created_on < DATE '2026-06-01'`.
   The other dates are in [reference/keys.md](reference/keys.md); use one only when the question
   names it (released, closed, scheduled, required, actual).
-- **A plant** is matched by the plant rule of [reference/keys.md](reference/keys.md#plant): never a
-  plain `plant = 'N'` on notifications, where `65E` and `65I` are plant 65.
+- **A plant** is matched by the plant rule of [reference/keys.md](reference/keys.md#plant). On
+  notifications, plant 65 is `plant` = 65 as a number; the department plants `65E` and `65I` are
+  not plant 65 and are left out.
 - **A count** counts rows. In `IK17_KG` a row is one reading of a point, so "how many points" counts
   readings; give the count of distinct points beside it when the two differ.
 - **"Not performed"** points are `text_code IN ('Not performed', 'Not checked')`.

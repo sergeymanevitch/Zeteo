@@ -44,7 +44,9 @@ reply, `/exit`; repeat. [collect.py](collect.py) reads either kind.
 ## Outputs
 
 - `../<arm>/raw/<model>/q<N>-<session>.jsonl`: every session's transcript, a byte copy of what
-  Claude Code recorded.
+  Claude Code recorded. An arm run more than once gets one round folder per run, named as the
+  third argument of `collect.py` (`../treatment/01_folder-679d0fb/raw/…`), each from its own run
+  folder (`run/make_arm.sh treatment ~/zeteo-runs/treatment-2`).
 - `../<arm>/<arm>.md`: per session the question, the full final reply, seconds, model calls, tool
   calls, tokens and cost, written by [collect.py](collect.py) and never edited by hand.
 

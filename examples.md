@@ -12,18 +12,19 @@ They show the shape of an answer, not answers to reuse: every new question gets 
 
 **Q:** How many urgent (24-hour) notifications were opened for plant 65 in March 2026?
 
-Criteria: table `ZIW28_KG`; plant 65 by the plant rule (so `65E`, `65I` count); priority 2
+Criteria: table `ZIW28_KG`; plant 65 by the plant rule (`plant` = 65; `65E`, `65I` left out); priority 2
 ("within 24 hours"); `created_on` in March 2026.
 
 ```sql
 SELECT count(*) AS notifications
 FROM 'data/ZIW28_KG.parquet'
-WHERE coalesce(try_cast(regexp_extract(plant, '^[0-9]+') AS INTEGER), try_cast(split_part(functional_location, '-', 2) AS INTEGER)) = 65
+WHERE try_cast(plant AS INTEGER) = 65
   AND priority = 2
   AND created_on >= DATE '2026-03-01' AND created_on < DATE '2026-04-01';
 ```
 
-**A:** 228. Read as `plant = '65'` alone (without `65E`, `65I` and empty plants) the count is 187.
+**A:** 187. With the department plants `65E` and `65I` and the empty plants of locations in plant 65
+added, the count would be 228; they are not plant 65.
 
 ## 2. A share
 
@@ -109,7 +110,7 @@ Criteria: `ZIW28_KG` for notifications, plant 56 by the plant rule, `created_on`
 WITH top AS (
   SELECT functional_location, count(*) AS notifications
   FROM 'data/ZIW28_KG.parquet'
-  WHERE coalesce(try_cast(regexp_extract(plant, '^[0-9]+') AS INTEGER), try_cast(split_part(functional_location, '-', 2) AS INTEGER)) = 56
+  WHERE try_cast(plant AS INTEGER) = 56
     AND created_on >= DATE '2025-01-01' AND created_on < DATE '2026-01-01'
     AND functional_location LIKE '%/%'
   GROUP BY functional_location
@@ -124,7 +125,7 @@ LEFT JOIN 'data/ZK22_KG.parquet' z
 GROUP BY top.functional_location, top.notifications;
 ```
 
-**A:** `D-56-03-M-00630/00`, 72 notifications, 12,322.91 net material cost. The next unit has 62.
+**A:** `D-56-03-M-00630/00`, 59 notifications, 12,322.91 net material cost. The next unit has 49.
 
 ## 7. Orders by work center and type
 

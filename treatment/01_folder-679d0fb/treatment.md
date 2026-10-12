@@ -5,7 +5,7 @@ type: record
 
 # treatment — what was asked and what came back
 
-Written by [collect.py](../run/collect.py) from the raw transcripts in [raw/](raw/); never edited by hand. Every recorded session is listed, in the order it started.
+Written by [collect.py](../../run/collect.py) from the raw transcripts in [raw/](raw/); never edited by hand. Every recorded session is listed, in the order it started.
 
 Run folder: `/Users/Sergey/zeteo-runs/treatment`. Claude Code: 2.1.296.
 

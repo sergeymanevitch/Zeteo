@@ -29,15 +29,17 @@ whole plant, 589 of them `D-65`),
 
 | Table | Plant of a row |
 | --- | --- |
-| `ZIW28_KG` | the leading digits of `plant`; where `plant` is empty, the 2nd segment of `functional_location` |
+| `ZIW28_KG` | `plant`, read as a number; a value with a department letter (`64E`) or an empty value is no plant |
 | `IK17_KG`, `ZK22_KG` | the 2nd segment of `functional_location` (no `plant` column) |
 | `ZW38_KG` | `plant` as stored (no `functional_location`) |
 
 On notifications a letter after the digits names a department, not a plant: `E` electrical, `I`
-instrumentation. `65E` and `65I` are plant 65, where the work is done. Plants are numbers: `010` is
+instrumentation. `65E` and `65I` are synthetic plants that say which department is in charge of
+work done in plant 65. They are **not** counted as plant 65: a question about plant 65 means the
+rows whose `plant` is `65` and nothing else (Sergey, 2026-10-12). Plants are numbers: `010` is
 plant 10 and `1` is plant 01, so compare them as integers. For plant 65:
 
-    coalesce(try_cast(regexp_extract(plant, '^[0-9]+') AS INTEGER), try_cast(split_part(functional_location, '-', 2) AS INTEGER)) = 65   -- ZIW28_KG
+    try_cast(plant AS INTEGER) = 65                                                              -- ZIW28_KG
     split_part(functional_location, '-', 2) = '65'                                               -- IK17_KG, ZK22_KG
     plant = '65'                                                                                 -- ZW38_KG
 

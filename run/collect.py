@@ -1,10 +1,12 @@
 """Copy one arm's raw session transcripts into the repository and write the arm's summary.
 
     python3 run/collect.py control   ~/zeteo-runs/control
-    python3 run/collect.py treatment ~/zeteo-runs/treatment
+    python3 run/collect.py treatment ~/zeteo-runs/treatment-2 02_plant-rule
+
+An optional third argument names a round folder inside the arm, for an arm run more than once.
 
 Reads every Claude Code session recorded for ARM_DIR (~/.claude/projects/<ARM_DIR encoded>/).
-Writes <arm>/raw/<model>/q<N>-<session>.jsonl, each a byte copy, and <arm>/<arm>.md.
+Writes <arm>[/<round>]/raw/<model>/q<N>-<session>.jsonl, each a byte copy, and <arm>.md beside raw/.
 Nothing is filtered: a session whose prompt is not a question of questions.md is copied as
 unmatched-<session>.jsonl and listed; a question asked twice is listed twice.
 Safe to re-run; it never edits a transcript.
@@ -84,8 +86,8 @@ def one_line(text, width=90):
 
 
 def main():
-    if len(sys.argv) != 3 or sys.argv[1] not in ("control", "treatment"):
-        sys.exit("usage: python3 run/collect.py control|treatment ARM_DIR")
+    if len(sys.argv) not in (3, 4) or sys.argv[1] not in ("control", "treatment"):
+        sys.exit("usage: python3 run/collect.py control|treatment ARM_DIR [ROUND]")
     arm = sys.argv[1]
     arm_dir = os.path.realpath(os.path.expanduser(sys.argv[2]))
     source = pathlib.Path.home() / ".claude" / "projects" / re.sub(r"[^A-Za-z0-9]", "-", arm_dir)
@@ -97,7 +99,8 @@ def main():
     sessions = [s for s in sessions if s["first"]]
     sessions.sort(key=lambda s: s["first"])
 
-    out_dir = REPO / arm
+    out_dir = REPO / arm / sys.argv[3] if len(sys.argv) == 4 else REPO / arm
+    tool = os.path.relpath(REPO / "run" / "collect.py", out_dir)
     rows = []
     for s in sessions:
         number = asked.index(s["prompts"][0]) + 1 if s["prompts"][0] in asked else None
@@ -112,7 +115,7 @@ def main():
     lines = [
         "---", "layer: L4", "type: record", "---", "",
         f"# {arm} — what was asked and what came back", "",
-        f"Written by [collect.py](../run/collect.py) from the raw transcripts in [raw/](raw/); "
+        f"Written by [collect.py]({tool}) from the raw transcripts in [raw/](raw/); "
         "never edited by hand. Every recorded session is listed, in the order it started.", "",
         f"Run folder: `{arm_dir}`. "
         f"Claude Code: {', '.join(sorted({s['version'] or '?' for _, _, s, _, _ in rows}))}.", "",
