@@ -19,4 +19,4 @@ Read [identity.md](identity.md), then [rules.md](rules.md), before answering any
 | what a code, status, priority or unit means | [reference/codes.md](reference/codes.md) |
 | the columns of one table | [reference/ik17.md](reference/ik17.md), [reference/ziw28.md](reference/ziw28.md), [reference/zk22.md](reference/zk22.md), [reference/zw38.md](reference/zw38.md) |
 
-Query with the DuckDB CLI from this folder: `duckdb -c "SELECT ... FROM 'data/ZIW28_KG.parquet' ..."`.
+Query with [query.py](query.py) from this folder: `uv run query.py "SELECT ... FROM ZIW28_KG ..."`.

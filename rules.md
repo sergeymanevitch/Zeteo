@@ -16,8 +16,10 @@ type: reference
    codes and words, [reference/keys.md](reference/keys.md) for plant, location and dates, and the
    table's own file for its columns. A value goes into the query only as it is stored in the data.
 4. **State the criteria** in one short list before querying.
-5. **Write one SQL query and run it** with the DuckDB CLI from this folder:
-   `duckdb -c "<query>"` over `'data/<TABLE>.parquet'`. Quote the column `"order"`.
+5. **Write one SQL query and run it** with [query.py](query.py) from this folder:
+   `uv run query.py "<query>"` (or `python3 query.py "<query>"` where the `duckdb` package is
+   installed). The tables are named `IK17_KG`, `ZIW28_KG`, `ZK22_KG`, `ZW38_KG`; `query.py --tables`
+   lists their columns. Quote the column `"order"`. `query.py` reads; it runs no other statement.
 6. **Answer from the result only**: the number first, then the criteria, then the exact SQL that
    produced it.
 

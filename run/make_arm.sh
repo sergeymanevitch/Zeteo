@@ -17,7 +17,7 @@ repo=$(cd "$(dirname "$0")/.." && pwd)
 dest=${2:-$HOME/zeteo-runs/$arm}
 
 # The files the treatment gets and the control does not. One home: here.
-FOLDER="CLAUDE.md identity.md rules.md examples.md reference"
+FOLDER="CLAUDE.md identity.md rules.md examples.md reference query.py"
 
 if [ -e "$dest" ]; then
     echo "$dest exists; remove it or name another" >&2

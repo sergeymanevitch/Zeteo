@@ -12,7 +12,7 @@ The one variable is the folder. The prompt is the question exactly as written in
 [../questions.md](../questions.md), nothing added; each question gets its own fresh session; the
 models are Haiku, Sonnet and Opus, in that order. The control's folder holds the four Parquet files
 of [../data/](../data/CONTEXT.md) and nothing else. The treatment's holds the same files plus the
-folder — `CLAUDE.md`, `identity.md`, `rules.md`, `examples.md`, `reference/` — which Claude Code
+folder — `CLAUDE.md`, `identity.md`, `rules.md`, `examples.md`, `reference/`, `query.py` — which Claude Code
 loads by itself through `CLAUDE.md`. Both run outside any folder holding a `CLAUDE.md`, so nothing
 of this workspace reaches either.
 

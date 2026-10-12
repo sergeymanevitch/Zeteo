@@ -5,7 +5,7 @@ type: reference
 
 # Worked examples
 
-Each was run with `duckdb -c` from this folder on 2026-10-12; the result is what DuckDB returned.
+Each was run with `uv run query.py` from this folder on 2026-10-12; the result is what it returned.
 They show the shape of an answer, not answers to reuse: every new question gets its own query.
 
 ## 1. A count with a plant, a priority and a month
@@ -17,7 +17,7 @@ Criteria: table `ZIW28_KG`; plant 65 by the plant rule (`plant` = 65; `65E`, `65
 
 ```sql
 SELECT count(*) AS notifications
-FROM 'data/ZIW28_KG.parquet'
+FROM ZIW28_KG
 WHERE try_cast(plant AS INTEGER) = 65
   AND priority = 2
   AND created_on >= DATE '2026-03-01' AND created_on < DATE '2026-04-01';
@@ -37,7 +37,7 @@ June 2026; part `text_code = 'Not OK'`, whole all readings.
 SELECT count(*) FILTER (WHERE text_code = 'Not OK') AS not_ok,
        count(*) AS readings,
        round(100.0 * count(*) FILTER (WHERE text_code = 'Not OK') / count(*), 2) AS pct
-FROM 'data/IK17_KG.parquet'
+FROM IK17_KG
 WHERE split_part(functional_location, '-', 2) = '32'
   AND created_on >= DATE '2026-06-01' AND created_on < DATE '2026-07-01';
 ```
@@ -56,7 +56,7 @@ SELECT sum(cost) AS net_cost,
        sum(cost) FILTER (WHERE cost > 0) AS booked,
        sum(cost) FILTER (WHERE cost < 0) AS returned,
        count(*) AS lines
-FROM 'data/ZK22_KG.parquet'
+FROM ZK22_KG
 WHERE functional_location = 'D-64-02-M-0261F/04'
   AND date >= DATE '2021-01-01' AND date < DATE '2021-02-01';
 ```
@@ -74,7 +74,7 @@ Criteria: table `ZIW28_KG`; `notification = '100381621'`; report every row with 
 ```sql
 SELECT notification, created_on, priority, notification_system_status, notification_user_status,
        order_system_status
-FROM 'data/ZIW28_KG.parquet'
+FROM ZIW28_KG
 WHERE notification = '100381621';
 ```
 
@@ -91,7 +91,7 @@ the question names points, and points are read more than once, so give both coun
 
 ```sql
 SELECT count(DISTINCT point) AS points, count(*) AS readings
-FROM 'data/IK17_KG.parquet'
+FROM IK17_KG
 WHERE functional_location LIKE 'D-65-02-%'
   AND created_on >= DATE '2026-09-01' AND created_on < DATE '2026-10-01';
 ```
@@ -109,7 +109,7 @@ Criteria: `ZIW28_KG` for notifications, plant 56 by the plant rule, `created_on`
 ```sql
 WITH top AS (
   SELECT functional_location, count(*) AS notifications
-  FROM 'data/ZIW28_KG.parquet'
+  FROM ZIW28_KG
   WHERE try_cast(plant AS INTEGER) = 56
     AND created_on >= DATE '2025-01-01' AND created_on < DATE '2026-01-01'
     AND functional_location LIKE '%/%'
@@ -119,7 +119,7 @@ WITH top AS (
 )
 SELECT top.functional_location, top.notifications, coalesce(sum(z.cost), 0) AS net_material_cost
 FROM top
-LEFT JOIN 'data/ZK22_KG.parquet' z
+LEFT JOIN ZK22_KG z
   ON z.functional_location = top.functional_location
  AND z.date >= DATE '2025-01-01' AND z.date < DATE '2026-01-01'
 GROUP BY top.functional_location, top.notifications;
@@ -136,7 +136,7 @@ Criteria: table `ZW38_KG`; `main_work_center = '6415'`; `order_type = 'RPM2'` (p
 
 ```sql
 SELECT count(*) AS orders
-FROM 'data/ZW38_KG.parquet'
+FROM ZW38_KG
 WHERE main_work_center = '6415' AND order_type = 'RPM2'
   AND created_on >= DATE '2025-01-01' AND created_on < DATE '2026-01-01';
 ```
