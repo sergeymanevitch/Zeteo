@@ -124,8 +124,14 @@ answers are wrong, and [results.md](results.md) says how.
 
 ## Asking it your own question
 
-Build the treatment folder as above, `cd` into it, start `claude`, and ask in plain English. Or
-query directly from this repository:
+Build the treatment folder as above, `cd` into it, start `claude`, and ask in plain English.
+
+In a Claude Project, turn on code execution with network access for package managers (Settings →
+Capabilities), so that `uv run query.py` can fetch `duckdb`; without it the sandbox cannot reach
+PyPI and the folder has no way to query the data. Tried by Sergey on 2026-10-13 with that access on:
+question 1 of [questions.md](questions.md) returned 3. No Project run is recorded in this repository.
+
+Or query directly from this repository:
 
     uv run query.py --tables
     uv run query.py "SELECT count(*) FROM ZIW28_KG WHERE priority = 1"
