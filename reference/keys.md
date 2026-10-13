@@ -58,15 +58,58 @@ that work center `8811` serves both `88` and `8100`.
 
 ## Dates
 
-| Table | Default for "in a month / year" | Other dates (use only when the question names them) | Data runs |
-| --- | --- | --- | --- |
-| `ZIW28_KG` | `created_on` | `required_start_date`, `scheduled_end_date`, `reference_date` (undocumented) | 2019-01-01 to 2026-10-10 |
-| `ZW38_KG` | `created_on` | `released_on`, `scheduled_start_date`, `scheduled_end_date`, `actual_start_date`, `actual_end_date`, `actual_start_date_2`, `required_end_date`, `closed_on` | 2018-05-03 to 2026-10-08 |
-| `IK17_KG` | `created_on` | none | 2019-08-08 to 2026-10-08 |
-| `ZK22_KG` | `date` | none | 2018-01-01 to 2026-09-30 |
+Every table has several dates, and each answers a different question. Pick the column by what the
+question asks about — opened, due, planned, released, started, closed — from the tables below.
+When the question names a period and no event ("notifications in plant 64 in September 2026"),
+use the table's default. A day is `col = DATE '2026-10-05'`; a month or a year is a half-open range,
+`col >= DATE '2026-09-01' AND col < DATE '2026-10-01'`. Name the column in the criteria, and when
+another date would give a different reading, give its number on the line for the other reading.
 
-The "Data runs" column is the range of the default date. What the other dates hold, and where they
-cannot be trusted, is in each table's file.
+### Notifications, `ZIW28_KG`
 
-A date later than today is an entry mistake, never a plan: people mistype years, and dates as
-far as 2030 occur (Sergey).
+The default is `required_start_date`: the plant reads a notification by the day its work is
+required, to plan the work (Sergey, 2026-10-13).
+
+| The question asks | Column |
+| --- | --- |
+| notifications in a period, no event named | `required_start_date` (default) |
+| when the work is required, due, to be done by; planning | `required_start_date` |
+| when notifications were opened, created, raised, reported; comparing how many were opened in one month with another | `created_on` |
+| when the work is scheduled to end | `scheduled_end_date` |
+| the reference date, by name | `reference_date` (undocumented; say so) |
+
+`required_start_date` runs from 2008-05-01 to 2028-12-21; 3 rows before 2000 are not real dates.
+`created_on` runs from 2019-01-01 to 2026-10-10. No column holds the day a notification's work was
+done, so whether it was done on time cannot be answered from this data; say so.
+
+### Orders, `ZW38_KG`
+
+The default is `created_on`: how many orders were opened in a period, and how many of those were
+then completed — completed as [codes.md](codes.md) defines it under the system status (Sergey,
+2026-10-13).
+
+| The question asks | Column |
+| --- | --- |
+| orders in a period, no event named; orders opened, created | `created_on` (default) |
+| orders planned or scheduled for a day or a period; scheduled to start | `scheduled_start_date` |
+| scheduled to end | `scheduled_end_date` |
+| required to end, due | `required_end_date` |
+| released | `released_on` |
+| when work actually started | `actual_start_date` (empty on most orders; say how many have none) |
+| actually ended | `actual_end_date` — it equals `scheduled_end_date` on almost every row; say so |
+| closed, technically completed | `closed_on`, on orders with `TECO` only ([zw38.md](zw38.md)) |
+
+`created_on` runs from 2018-05-03 to 2026-10-08. `actual_start_date_2` is described in
+[zw38.md](zw38.md) and used only when named.
+
+### Readings and material cost
+
+`IK17_KG` has one date, `created_on`, the day of the reading (2019-08-08 to 2026-10-08).
+`ZK22_KG` has one date, `date`, the day of the booking (2018-01-01 to 2026-09-30).
+
+### A date later than today
+
+A date later than today is kept and counted as stored. Planned dates run ahead by design, and
+dates up to five years ahead occur and can be real; with these exports alone a mistyped date cannot
+be told from a real one (Sergey, 2026-10-13). When an answer counts rows dated later than today,
+say how many.

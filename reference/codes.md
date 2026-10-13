@@ -80,11 +80,19 @@ spaces on orders (`PLAN EXE  COMP`). Match a code with `regexp_matches(field, '\
 Codes separated by spaces. `order_system_status` on notifications is the status of the order
 attached to the notification; it is empty on the 32,639 notifications that have no order.
 
+**A completed order** (Sergey, 2026-10-13) has `TECO` in `ZW38_KG.system_status`, or `CMPL`
+without `NCMP`. An order with both `CMPL` and `NCMP` was closed without the work being done and is
+not completed. In the data: 62,493 orders with `TECO`, 5,024 with `CMPL` and `NCMP`, 142 with
+`CMPL` alone; no order holds `TECO` with either.
+
+    regexp_matches(system_status, '\bTECO\b')
+      OR (regexp_matches(system_status, '\bCMPL\b') AND NOT regexp_matches(system_status, '\bNCMP\b'))
+
 | Code | Meaning | Source |
 | --- | --- | --- |
 | `TECO` | technically completed: the work was performed | plant |
-| `CMPL` | completed | plant |
-| `NCMP` | not for completion | plant |
+| `CMPL` | completed — closed; with `NCMP` beside it, closed without the work being done | plant |
+| `NCMP` | not for completion: beside `CMPL`, the order was closed and nothing was done | plant |
 | `NOCO` | notification completed | SAP |
 | `NOPR` | notification in process | SAP |
 | `NOPO` | notification postponed | SAP |

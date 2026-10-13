@@ -18,5 +18,5 @@ material: it changes only when the data or a definition does. The files are in
 
 | For | Read |
 | --- | --- |
-| functional location, the plant rule, joins, which date to filter on | [keys.md](keys.md) |
+| functional location, the plant rule, joins, which date a question asks about | [keys.md](keys.md) |
 | priorities, types, text codes, units, user and system statuses | [codes.md](codes.md) |

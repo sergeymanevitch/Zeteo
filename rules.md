@@ -28,10 +28,11 @@ fails, fix it and run it again; do not fall back to a guess.
 
 ## Defaults, when the question does not say
 
-- **A month or year** ("in May 2026") filters on `created_on` — for `ZK22_KG`, which has one date,
-  on `date`. Use a half-open range: `created_on >= DATE '2026-05-01' AND created_on < DATE '2026-06-01'`.
-  The other dates are in [reference/keys.md](reference/keys.md); use one only when the question
-  names it (released, closed, scheduled, required, actual).
+- **A date or a period** filters on the column the question asks about — opened, due, planned,
+  released, started, closed — by [reference/keys.md § Dates](reference/keys.md#dates). When it
+  names a period and no event, the default is `required_start_date` for notifications, `created_on`
+  for orders and readings, `date` for material cost. A day is `col = DATE '2026-10-05'`; a month a
+  half-open range: `col >= DATE '2026-05-01' AND col < DATE '2026-06-01'`.
 - **A plant** is matched by the plant rule of [reference/keys.md](reference/keys.md#plant). On
   notifications, plant 65 is `plant` = 65 as a number; the department plants `65E` and `65I` are
   not plant 65 and are left out.
@@ -41,6 +42,9 @@ fails, fix it and run it again; do not fall back to a guess.
 - **A percentage** is `100.0 * part / whole`, rounded to 2 decimals; say what the whole is.
 - **A cost** is the net sum of `cost`: returns are negative rows and stay in the sum. Give the
   booked and returned parts beside it when there are returns.
+- **A completed order** has `TECO` in `system_status`, or `CMPL` without `NCMP`; `CMPL` with
+  `NCMP` is an order closed without the work being done
+  ([reference/codes.md](reference/codes.md), under the system status).
 - **A status** "has" a code when the code appears anywhere in the status field, which may hold
   several codes. When one notification number has more than one row, report every row with its
   notification system status, user status and order system status. Decode every code you report with [reference/codes.md](reference/codes.md).

@@ -5,7 +5,8 @@ type: reference
 
 # Worked examples
 
-Each was run with `uv run query.py` from this folder on 2026-10-12; the result is what it returned.
+Each was run with `uv run query.py` from this folder — 1 to 7 on 2026-10-12, 8 to 10 on 2026-10-13;
+the result is what it returned.
 They show the shape of an answer, not answers to reuse: every new question gets its own query.
 
 ## 1. A count with a plant, a priority and a month
@@ -100,10 +101,10 @@ WHERE functional_location LIKE 'D-65-02-%'
 
 ## 6. Two tables joined on the location
 
-**Q:** Which equipment unit in plant 56 had the most notifications in 2025, and what did its
+**Q:** Which equipment unit in plant 56 had the most notifications opened in 2025, and what did its
 material cost that year?
 
-Criteria: `ZIW28_KG` for notifications, plant 56 by the plant rule, `created_on` in 2025, units only
+Criteria: `ZIW28_KG` for notifications, plant 56 by the plant rule, `created_on` in 2025 (opened), units only
 (location with `/`); `ZK22_KG` for cost on the same `functional_location`, `date` in 2025.
 
 ```sql
@@ -142,3 +143,57 @@ WHERE main_work_center = '6415' AND order_type = 'RPM2'
 ```
 
 **A:** 443.
+
+## 8. Notifications in a month, no event named
+
+**Q:** How many notifications did plant 13 have in August 2026?
+
+Criteria: table `ZIW28_KG`; plant 13 by the plant rule; no event named, so the default date,
+`required_start_date`, in August 2026 ([reference/keys.md § Dates](reference/keys.md#dates)).
+
+```sql
+SELECT count(*) AS notifications
+FROM ZIW28_KG
+WHERE try_cast(plant AS INTEGER) = 13
+  AND required_start_date >= DATE '2026-08-01' AND required_start_date < DATE '2026-09-01';
+```
+
+**A:** 58. Counted by the day they were opened (`created_on` in August 2026), 69.
+
+## 9. Orders planned for one day
+
+**Q:** How many orders are planned in plant 32 for work center 3215 on 5 October 2026?
+
+Criteria: table `ZW38_KG`; `plant = '32'`; `main_work_center = '3215'`; planned, so
+`scheduled_start_date` = 2026-10-05.
+
+```sql
+SELECT count(*) AS orders
+FROM ZW38_KG
+WHERE plant = '32' AND main_work_center = '3215'
+  AND scheduled_start_date = DATE '2026-10-05';
+```
+
+**A:** 1. None of that work center's orders was created that day.
+
+## 10. Orders opened in a month, and how many were completed
+
+**Q:** How many orders were opened in plant 43 in May 2026, and how many of them were completed?
+
+Criteria: table `ZW38_KG`; `plant = '43'`; `created_on` in May 2026; completed = `TECO` in
+`system_status`, or `CMPL` without `NCMP` ([reference/codes.md](reference/codes.md)).
+
+```sql
+SELECT count(*) AS opened,
+       count(*) FILTER (WHERE regexp_matches(system_status, '\bTECO\b')
+                           OR (regexp_matches(system_status, '\bCMPL\b')
+                               AND NOT regexp_matches(system_status, '\bNCMP\b'))) AS completed,
+       count(*) FILTER (WHERE regexp_matches(system_status, '\bCMPL\b')
+                          AND regexp_matches(system_status, '\bNCMP\b')) AS closed_not_done
+FROM ZW38_KG
+WHERE plant = '43'
+  AND created_on >= DATE '2026-05-01' AND created_on < DATE '2026-06-01';
+```
+
+**A:** 157 opened, 125 completed (79.62 %); 20 were closed without the work being done; the other 12
+are neither.

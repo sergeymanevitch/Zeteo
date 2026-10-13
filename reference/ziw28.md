@@ -12,7 +12,7 @@ notifications as such and the two counts differ.
 
 | Column | Type | Holds |
 | --- | --- | --- |
-| `created_on` | DATE | the day the notification was created; the date for "in a month" |
+| `created_on` | DATE | the day the notification was opened; the date for "opened in" ([keys.md](keys.md#dates)) |
 | `scheduled_end_date` | DATE | the scheduled end; 3 rows before 2000 are not real dates |
 | `notification` | VARCHAR | the notification number |
 | `notification_type` | VARCHAR | `R1`, `R2`, `R3`, `R5`, `R6`, meaning undocumented ([codes.md](codes.md)) |
@@ -22,6 +22,6 @@ notifications as such and the two counts differ.
 | `order_system_status` | VARCHAR | system status of the order attached; empty on the 32,639 notifications without an order; truncated in the export ([codes.md](codes.md)) |
 | `functional_location` | VARCHAR | where the work is ([keys.md](keys.md)); a whole plant on 641 rows |
 | `main_work_center` | VARCHAR | the work center responsible: 225 values, plain numbers (`3211`) or names (`64MAINT`, `43PUMP`); empty on 6 rows |
-| `required_start_date` | DATE | the required start; 3 rows before 2000 are not real dates |
+| `required_start_date` | DATE | the day the work is required to start, used to plan it; the default for "notifications in a month" ([keys.md](keys.md#dates)); 3 rows before 2000 are not real dates |
 | `plant` | VARCHAR | the plant; a department letter (`65E`, `65I`) marks a synthetic plant that is left out of plant 65; empty on 3,887 rows — use the plant rule of [keys.md](keys.md#plant) |
 | `reference_date` | DATE | undocumented; one row reads 9202-12-15 |
