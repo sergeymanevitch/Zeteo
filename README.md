@@ -10,7 +10,10 @@ because the key is itself wrong three times. By what the data says, no folder go
 folder 12, then 14 in its last round — every point from a domain meaning the questions' author
 supplied, one of them written after the runs. The folder is a third faster and a sixth dearer, and
 most of what made no folder good was spent before the control ran, on cleaning the data both arms
-got. The whole account, losses and ties included: [results.md](results.md).
+got. On thirty questions the author did not write, the folder got 82 of 90 answers right and no
+folder 49: the arms tie on plain questions, and the lead is the owner's meanings and an honest
+"cannot" where the data holds no answer. The whole account, losses and ties included:
+[results.md](results.md).
 
 ## What is here
 
@@ -25,8 +28,8 @@ got. The whole account, losses and ties included: [results.md](results.md).
 | [examples.md](examples.md) | worked questions with their SQL and what they return |
 | [reference/](reference/CONTEXT.md) | the map of the data: tables, columns, codes, keys, which date |
 | [query.py](query.py) | one read-only door to the four tables, used by the folder from round 3 |
-| [control/](control/control.md) | the run without the folder, raw transcripts and a summary |
-| [treatment/](treatment/CONTEXT.md) | the runs with the folder — four rounds, raw transcripts and a summary each |
+| [control/](control/control.md) | the run without the folder, raw transcripts and a summary; `unseen/` the same on the thirty questions |
+| [treatment/](treatment/CONTEXT.md) | the runs with the folder — four rounds and the thirty questions, raw transcripts and a summary each |
 | [run/](run/CONTEXT.md) | the kit that builds each arm, asks the questions and records the sessions |
 | [results.md](results.md) | what changed, question by question, and what changed in the folder because of it |
 

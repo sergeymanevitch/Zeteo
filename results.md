@@ -14,6 +14,13 @@ about a third faster and **15–21 % dearer**, not cheaper as its first three ro
 Most of what made no folder good was spent before the control ran: on cleaning the data both arms
 got.
 
+**On thirty questions its author did not write, the folder got 82 of 90 answers right and no folder
+49** (§ Thirty questions the author did not write). On the eleven questions that need no reading
+of the data's meaning, every model in both arms was right. The lead is the owner's meanings — which
+date a month means, when a notification is completed, which status is current — and one honest
+habit: asked for what the data does not hold, no folder made a number up in five answers of six,
+the folder in one.
+
 ## The setup
 
 Two arms, one variable. The same five questions of [questions.md](questions.md), in the same order,
@@ -37,6 +44,8 @@ committed, raw; none was repeated or dropped.
 | treatment, round 2 | folder at `b35316d`: the plant rule changed | [treatment/02_plant-rule/](treatment/02_plant-rule/treatment.md) |
 | treatment, round 3 | folder at `aa8e82a`: every query through `query.py` | [treatment/03_query-py/](treatment/03_query-py/treatment.md) |
 | treatment, round 4 | folder at `d85d39b`: a date picked by what the question asks | [treatment/04_date-rule/](treatment/04_date-rule/treatment.md) |
+| control, unseen questions | the four Parquet files alone | [control/unseen/](control/unseen/control.md) |
+| treatment, unseen questions | folder at `236cc9f` | [treatment/unseen/](treatment/unseen/treatment.md) |
 
 Sergey launched the control and rounds 1–3 from his terminal. Round 4 was launched by the agent
 that built the folder, on his word, with `run/ask.sh` under `env -i` (only `HOME`, `USER`,
@@ -58,6 +67,9 @@ The order is in the git history (times Israel):
 | `4f93111` | 10-12 23:40 | treatment round 3 (sessions 23:36–23:40) |
 | `d85d39b` | 10-13 08:49 | dates by what the question asks; a completed order; no future date read as a mistake |
 | `2ba053f` | 10-13 09:03 | treatment round 4 (sessions 08:58–09:02) |
+| `4866ad0` | 10-13 12:25 | thirty questions the author did not write |
+| `929a58d` | 10-13 12:34 | their expected answers |
+| `1a1bfe6` | 10-13 13:59 | both arms on the thirty questions (sessions 12:35–13:44) |
 
 ## The answer key was wrong three times
 
@@ -212,6 +224,96 @@ start-up. Cost is the `totalCostUSD` Claude Code recorded.
   treatment answer states its criteria and its SQL. Rounds 1 and 2 queried with DuckDB; rounds 3
   and 4 queried only through [`query.py`](query.py), every session.
 
+## Thirty questions the author did not write
+
+The five questions above are the data owner's. To see whether the folder's lead holds on questions
+he did not write, a separate Claude Opus session wrote thirty ([questions-unseen.md](questions-unseen.md)).
+It could query the data and read the column names; it was told not to open the folder, the
+questions above, their runs or these results. Ten test the choice points the folder handles (A),
+ten the gaps found on 2026-10-13 (B), ten its own choice (C). The questions were committed first,
+then the expected answers, then both arms were asked, each question in its own fresh session, on
+the three models, launched by a subagent under `env -i`. The treatment ran on the folder at
+`236cc9f` — round 4's folder plus the code meanings and the three decisions recorded under § What
+changed. All 180 sessions are committed, none repeated.
+
+**The key leans toward the folder.** The expected answers were computed by the folder's author, by
+query, with the folder's definitions — the meanings the owner gave. One answer, A9, was settled by
+the owner after both arms had run: "electrical notifications of plant 65" is the electrical
+department plant `65E`, 171 (his own Excel count read 172, the header row counted again). The
+folder had read it as discipline `E` on plant 65 and lost it.
+
+Graded by the build agent from the final replies: **✓** the main answer is the key's; **≈** the main
+answer is the other reading the key gives beside it (almost always another date); **✗** neither.
+
+| | Haiku | Sonnet | Opus | ✓ | ✓ or ≈ |
+| --- | --- | --- | --- | --- | --- |
+| no folder | 15 ✓ · 9 ≈ · 6 ✗ | 16 · 11 · 3 | 18 · 8 · 4 | **49 / 90** | 77 / 90 |
+| folder | 27 · 1 · 2 | 27 · 2 · 1 | 28 · 1 · 1 | **82 / 90** | 86 / 90 |
+
+| # | Tests | No folder H · S · O | Folder H · S · O | What decided it |
+| --- | --- | --- | --- | --- |
+| A1 | released date | ✓✓✓ | ✓✓✓ | |
+| A2 | department plant `64E` | ✓✓✓ | ≈✓✓ | folder Haiku took the default date though the question says "raise" |
+| A3 | current status | ≈≈✗ | ✓✓✗ | first code from the left (5); no folder counted `EXE` anywhere (130); folder Opus read "being executed" as `NOPR` (251) |
+| A4 | rows or distinct points | ≈≈✓ | ✓✓✓ | no folder Haiku and Sonnet counted only points with a measured value (8) |
+| A5 | a completed order | ✓≈✓ | ✓✓✓ | `CMPL` without `NCMP` counts |
+| A6 | out of limits | ✓✓≈ | ✓✓✓ | no folder Opus dropped duplicates and swapped limits (132) |
+| A7 | cost with returns | ✓✓✓ | ✓✓✓ | |
+| A8 | percentage | ≈≈≈ | ✓✓✓ | default date |
+| A9 | "electrical" | ✗✓✓ | ✗✗≈ | the owner's reading, `65E`, given after the runs |
+| A10 | readings to cost by order | ✓✓✓ | ✓✓✓ | |
+| B1 | completed notification | ≈≈≈ | ✓✓✓ | default date |
+| B2 | is one notification finished | ✗✗✓ | ✓✓✓ | no folder Haiku and Sonnet looked for a Claude Code notification, not the data's |
+| B3 | duration, average | ✓✓✓ | ✓✓✓ | |
+| B4 | duration, median | ✓≈✓ | ✓✓✓ | `closed_on` only on `TECO` |
+| B5 | last month | ✓✓✓ | ✓✓✓ | |
+| B6 | this year against last | ≈≈≈ | ✓≈✓ | by opened date up, by required date down |
+| B7 | still open | ✓✓✓ | ✓✓✓ | |
+| B8 | outstanding now | ✗✗✗ | ✓≈✓ | no folder looked for `NOCO` anywhere (372, not 382) |
+| B9 | on time — unanswerable | ✗✗✗ | ✗✓✓ | every no-folder model, and folder Haiku, gave a percentage |
+| B10 | labour cost — not in the data | ✗✓✗ | ✓✓✓ | no folder Haiku and Opus derived "labour" from an hourly rate (≈23,790 and ≈€24,195) |
+| C1 | top 5 locations | ≈≈≈ | ✓✓✓ | default date |
+| C2 | top work center | ✓✓✓ | ✓✓✓ | |
+| C3 | by month | ≈≈≈ | ✓✓✓ | default date |
+| C4 | by type | ≈≈≈ | ✓✓✓ | default date |
+| C5 | plants compared | ✓✓✓ | ✓✓✓ | |
+| C6 | one location, two tables | ≈≈≈ | ✓✓✓ | default date |
+| C7 | top location by cost | ✓✓✓ | ✓✓✓ | |
+| C8 | order types | ✗✓✓ | ✓✓✓ | no folder Haiku read "open" as still open |
+| C9 | highest temperature | ✓✓✓ | ✓✓✓ | |
+| C10 | a duplicated notification | ✓✓✓ | ✓✓✓ | |
+
+Totals over thirty questions, seconds / USD, each model's first question on a cold cache in both
+arms:
+
+| Model | No folder | Folder |
+| --- | --- | --- |
+| Haiku | 665 / 0.18 | 390 / 0.19 |
+| Sonnet | 505 / 2.15 | 391 / 2.76 |
+| Opus | 1,028 / 5.56 | 636 / 5.79 |
+| **All** | **2,198 / 7.89** | **1,417 / 8.74** |
+
+The folder was 36 % faster and 11 % dearer — the same shape as on the five questions.
+
+What the thirty show:
+
+- **Plain questions need no folder.** Eleven need no reading of the data's meaning (A1, A7, A10,
+  B3, B5, B7, C2, C5, C7, C9, C10); all 66 answers to them are right in both arms.
+- **The lead is the owner's meanings.** 21 of no folder's 28 ≈ are the default date alone: it
+  read every period by the day a notification was opened, the owner reads it by the day the work
+  is required. Counting ≈ as right, the gap narrows to 86 against 77.
+- **The folder says "cannot" where the data cannot.** On B9 and B10 no folder produced a number in
+  five answers of six — an on-time percentage on a date that is only the scheduled one copied, and
+  a labour cost reverse-engineered from hourly rates. The folder did so once.
+- **Where the folder has no rule, it guesses like anyone.** A9 ("electrical") and A3 ("being
+  executed") are readings the folder does not fix, and it lost both, A9 to no folder.
+
+Sergey also ran the treatment folder on the thirty questions on another computer, all in one
+Claude Opus session, in about four minutes. Only the answers file exists, no transcript, so the
+run is not counted; graded the same way it gives 26 ✓, 2 ≈ (B6, C10) and 2 ✗ (A3, A9). The session
+named its own choices: "raised", "opened" and "logged" read by the opened date, "electrical" as
+electrical locations, "being executed" as the SAP in-process status — the two places it lost.
+
 ## What changed in the folder because of the runs
 
 - **Because of the control: nothing.** The folder was written before the control's answers were
@@ -268,6 +370,8 @@ start-up. Cost is the `totalCostUSD` Claude Code recorded.
 - **A folder does not remove variance.** Rounds 1–3 gave the same number on all three models on
   every question; round 4's Haiku then broke a rule that had not changed (Q2).
 - **The folder buys speed and pays for it.** A third faster, a sixth to a fifth dearer.
+- **On questions its author did not write, the lead holds:** 82 of 90 against 49, and every point
+  of it is a meaning the owner gave or an honest "cannot". On plain questions the arms tie.
 
 ## Known flaws in this comparison
 
@@ -290,5 +394,7 @@ start-up. Cost is the `totalCostUSD` Claude Code recorded.
   the fair ones.
 - Round 4 was launched by the build agent from a cleaned environment, the other runs by Sergey
   from his terminal.
-- Every question was written by the data's owner. Whether the advantage holds on a question he
-  did not write is not tested here.
+- The five questions were written by the data's owner. The thirty unseen ones were written by a
+  separate session, but their expected answers were computed by the folder's author with the
+  folder's definitions, A9's was settled after the runs, and the grading (✓, ≈, ✗) is the build
+  agent's reading of each final reply.

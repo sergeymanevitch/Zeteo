@@ -15,8 +15,9 @@ folder named for what it ran on, holding the raw transcripts and the summary
 | [02_plant-rule/](02_plant-rule/treatment.md) | commit `b35316d` | a plant is the `plant` column alone; `64E`, `64I` and empty plants left out |
 | [03_query-py/](03_query-py/treatment.md) | commit `aa8e82a` | every query goes through `query.py`, a read-only door to the four tables |
 | [04_date-rule/](04_date-rule/treatment.md) | commit `d85d39b` | a date is picked by what the question asks; notifications in a month default to `required_start_date`; a completed order defined; no future date read as a mistake |
+| [unseen/](unseen/treatment.md) | commit `236cc9f` | not a round: the thirty questions of [questions-unseen.md](../questions-unseen.md), asked once, beside the control's [unseen/](../control/unseen/control.md) |
 
-Rounds 1–3 were launched by Sergey from his terminal; round 4 by the build agent on his word, under
+Rounds 1–3 were launched by Sergey from his terminal; round 4 and `unseen/` by the build agent (`unseen/` through a subagent) on his word, under
 `env -i` with only `HOME`, `USER`, `LOGNAME`, `SHELL`, `TERM`, `LANG`, `PATH` and `TMPDIR` passed.
 
 The round-1 files were moved here from `treatment/` unchanged; its summary was written again by
