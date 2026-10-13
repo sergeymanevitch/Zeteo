@@ -474,7 +474,10 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   Windows PowerShell before the `query.py` change: the query on `"order"` returned 20 and one on
   `units = '°C'` 108,596, as on the Mac, once `$OutputEncoding` was set that way and `PYTHONUTF8`
   was 1; with the default encoding the `°C` query returned 0, and a byte-order mark made `query.py`
-  refuse the query. Effect on the recorded answers: none — every run was on a Mac.
+  refuse the query. Tested again by Sergey after the change, from a fresh download of the
+  repository in a new PowerShell terminal without `PYTHONUTF8`: the `°C` query returned 108,596 and
+  `SELECT DISTINCT units` 22 rows, as on the Mac. Effect on the recorded answers: none — every run
+  was on a Mac.
 
 ## What this says, and what it does not
 
