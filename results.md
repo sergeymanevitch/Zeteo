@@ -56,7 +56,7 @@ by hand. Checked against the data afterwards, three of five do not hold. They st
 | # | Key | What the data says | Why the key differs |
 | --- | --- | --- | --- |
 | 2 | 171 | 170 | the hand count included the Excel header row |
-| 3 | 22.26 | 22.19 on the reading the key used (`required_start_date`, `plant = '64'`) | the residual 0.07 is unexplained |
+| 3 | 22.26 | 22.19: 231 of 1,041 on the reading the key used (`plant = '64'`, `required_start_date`) | the hand count included the Excel header row in both counts: 232 of 1,042 |
 | 4 | 9869.97 | 9119.14 for May 2026 | 9869.97 is the sum for **June** 2026 |
 
 ## Question by question
@@ -111,8 +111,9 @@ then gave 19.98 % on every model, the control's number. **The loss was reversed 
 after seeing it.** That is the folder fitted to an answer, and it is stated here as such: it moved
 the folder to what no folder already did, not to the key.
 
-Neither arm reaches 22.26. The key's own reading was `required_start_date` with `plant = '64'`
-(22.19 %); the folder's default date is `created_on`, Sergey's choice made knowing the key used
+Neither arm reaches 22.26, and neither should: the key counted the Excel header row, and its own
+reading — `plant = '64'` on `required_start_date` — gives 22.19 % (231 of 1,041) without it, in
+the raw export and in the Parquet file alike. The folder's default date is `created_on`, Sergey's choice made knowing the key used
 another date. Changing the default date would have moved the treatment toward the key, and been
 the folder built to pass the question. It was not done. From round 2 every model also offered a
 second reading — 20.34 % if the 21 notifications with no priority are left out of the whole.
