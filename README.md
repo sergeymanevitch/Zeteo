@@ -1,0 +1,103 @@
+# Zeteo
+
+A folder that answers questions about four SAP plant-maintenance datasets — notifications, orders,
+measuring-point readings and material costs — and the evidence of what it does that no folder does
+not. Every answer comes from one DuckDB query over the shipped Parquet files, and the answer shows
+the criteria and the SQL it ran.
+
+**What the evidence says, in one line:** by the answer key, the folder tied no folder (6 of 15
+against 6 of 15); by what the data says, it won one question of five, and most of its advantage was
+spent before the control ran — on cleaning the data both arms got. The whole account, losses and
+ties included: [results.md](results.md).
+
+## What is here
+
+| Path | What it is |
+| --- | --- |
+| [questions.md](questions.md) | five questions with the expected answers, committed before anything else (`fe7a35b`) |
+| [data/](data/CONTEXT.md) | the four Parquet files both arms query, with their row counts and sha256 |
+| [CLAUDE.md](CLAUDE.md) | the folder's entry: Claude Code loads it, and it routes to the rest |
+| [identity.md](identity.md) | who Zeteo is: an analyst that answers only from a query |
+| [rules.md](rules.md) | how to answer, step by step |
+| [examples.md](examples.md) | worked questions with their SQL and what they return |
+| [reference/](reference/CONTEXT.md) | the map of the data: tables, columns, codes, keys, which date |
+| [query.py](query.py) | one read-only door to the four tables, used by the folder from round 3 |
+| [control/](control/control.md) | the run without the folder, raw transcripts and a summary |
+| [treatment/](treatment/CONTEXT.md) | the runs with the folder — three rounds, raw transcripts and a summary each |
+| [run/](run/CONTEXT.md) | the kit that builds each arm, asks the questions and records the sessions |
+| [results.md](results.md) | what changed, question by question, and what changed in the folder because of it |
+
+The folder is the five files `CLAUDE.md`, `identity.md`, `rules.md`, `examples.md` and
+`reference/`, plus `query.py`. This README is for people and is copied into no run.
+
+## How the experiment ran
+
+The control gets the four Parquet files alone. The treatment gets the same files plus the folder.
+Each question of [`questions.md`](questions.md) is the whole prompt, asked as written in its own fresh headless
+`claude -p` session, on Haiku, then Sonnet, then Opus. Claude Code's session transcripts are copied
+into the repository byte for byte, with a summary written from them by script.
+
+The control ran once; the treatment ran three times, because the folder changed twice after a
+treatment run. Each round's folder is named for the commit it ran on; [results.md](results.md)
+says what changed and why.
+
+## Re-running both arms
+
+Requirements:
+
+- [Claude Code](https://claude.com/claude-code), logged in. The recorded runs used 2.1.296.
+- For the treatment: [`uv`](https://docs.astral.sh/uv/) (`uv run query.py` fetches `duckdb`), or a
+  `python3` with the `duckdb` package installed.
+- For recording: `python3` 3.9 or newer, standard library only.
+
+From the repository root:
+
+    run/make_arm.sh control                    # builds ~/zeteo-runs/control: the Parquet files only
+    run/ask.sh ~/zeteo-runs/control haiku
+    run/ask.sh ~/zeteo-runs/control sonnet
+    run/ask.sh ~/zeteo-runs/control opus
+    python3 run/collect.py control ~/zeteo-runs/control
+
+    run/make_arm.sh treatment                  # builds ~/zeteo-runs/treatment: the files plus the folder
+    run/ask.sh ~/zeteo-runs/treatment haiku
+    run/ask.sh ~/zeteo-runs/treatment sonnet
+    run/ask.sh ~/zeteo-runs/treatment opus
+    python3 run/collect.py treatment ~/zeteo-runs/treatment 04_rerun
+
+Things to know before you compare:
+
+- Run the kit from a fresh clone, so that what it records sits beside nothing you need to keep.
+- The run folder must sit outside any folder holding a `CLAUDE.md` or `AGENTS.md`, and must not
+  exist yet; [`make_arm.sh`](run/make_arm.sh) refuses either. Pass another path as its second argument.
+- [`ask.sh`](run/ask.sh) runs with `--permission-mode bypassPermissions`, so that no permission prompt puts a
+  person's wait into the timings. The run folder holds nothing but the arm's files.
+- `haiku`, `sonnet` and `opus` are aliases. The recorded runs resolved them to `claude-haiku-5-5`,
+  `claude-sonnet-5-5` and `claude-opus-5-5`; pass a full model ID to `ask.sh` to pin one.
+- [`collect.py`](run/collect.py) copies the sessions into the clone. Give the treatment a new round name (above,
+  `04_rerun`) so that it writes beside the committed rounds. The control has no rounds: its
+  transcripts land beside the committed ones and [`control/control.md`](control/control.md) is written again from the new
+  sessions alone — `git diff` shows the old against the new.
+- The current folder is round 3's. To re-run round 1 or 2, check out the commit the round names
+  (`679d0fb` or `b35316d`) in a separate worktree and use the kit from there.
+- The control's sessions explored the files with whatever was installed: pandas and pyarrow on the
+  recording machine, plus the DuckDB CLI 1.5.6 and a system Python holding `duckdb` 0.9.2. The
+  treatment's round 3 needs only [`query.py`](query.py).
+
+The expected spread: Q1 and Q5 the same in both arms; Q2 170 with the folder and 71 (or 60
+distinct points) without; Q3 19.98 % in both; Q4 9119.14 in both. Three of the committed expected
+answers are wrong, and [results.md](results.md) says how.
+
+## Asking it your own question
+
+Build the treatment folder as above, `cd` into it, start `claude`, and ask in plain English. Or
+query directly from this repository:
+
+    uv run query.py --tables
+    uv run query.py "SELECT count(*) FROM ZIW28_KG WHERE priority = 1"
+
+## Limits
+
+- The data is cleaned for both arms: Hebrew values translated, misspelt headers corrected, types
+  set. The raw Excel exports are not published, and no arm was run on them.
+- The questions and the folder's domain meanings come from one person, the data's owner.
+- One run per model per question per round, on one machine.
