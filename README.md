@@ -1,28 +1,35 @@
 # Zeteo
 
 A folder that answers questions about four SAP plant-maintenance datasets — notifications, orders,
-measuring-point readings and material costs — and the evidence of what it does that no folder does
-not. Every answer comes from one DuckDB query over the shipped Parquet files, and the answer shows
-the criteria and the SQL it ran.
+measuring-point readings and material costs — and the evidence of whether it beats no folder.
+Every answer comes from one DuckDB query over the shipped Parquet files, and the answer shows the
+criteria and the SQL it ran.
 
-**What the evidence says:** by the answer key, the folder tied no folder (6 of 15 against 6 of 15),
-because the key is itself wrong three times. By what the data says, no folder got 9 of 15 and the
-folder 12, then 14 in its last round — every point from a domain meaning the questions' author
-supplied, one of them written after the runs. The folder is a third faster and a sixth dearer, and
-most of what made no folder good was spent before the control ran, on cleaning the data both arms
-got. On thirty questions the author did not write, the folder got 80 of 90 answers right and no
-folder 49 (82 against 49 as first graded, before the owner changed A3's expected answer after the
-runs): the arms tie on plain questions, and the lead is the owner's meanings and an honest
-"cannot" on the two questions written to be unanswerable — though on A3, which the owner's later
-reading made unanswerable, every answer of both arms gave a number. The whole account, losses and ties included:
-[results.md](results.md).
+The data's owner, Sergey Manevitch, wrote the five questions, their expected answers and the
+folder; "the owner" below is him.
+
+**What the evidence says**, three ways:
+
+- **By the answer key** of [questions.md](questions.md): a tie, 6 of 15 against 6 of 15, because
+  the key is itself wrong on three of the five questions.
+- **By what the data says:** no folder 9 of 15, the folder 12 in rounds 1–3 and 14 in round 4 —
+  every point from a domain meaning the owner supplied, one of them written after the runs. The
+  folder is about a third faster and 15–21 % dearer, and most of what made no folder good was
+  spent before the control ran, on cleaning the data both arms got.
+- **On thirty questions the owner did not write:** the folder 80 of 90 answers right, no folder 49
+  (82 against 49 as first graded, before the owner changed A3's expected answer after the runs).
+  The arms tie on plain questions; the lead is the owner's meanings and an honest "cannot" on the
+  two questions written to be unanswerable — though on A3, which the owner's later reading made
+  unanswerable, every answer of both arms gave a number.
+
+The whole account, losses and ties included: [results.md](results.md).
 
 ## What is here
 
 | Path | What it is |
 | --- | --- |
 | [questions.md](questions.md) | five questions with the expected answers, committed before anything else (`fe7a35b`) |
-| [questions-unseen.md](questions-unseen.md) | thirty questions the author did not write, committed before either arm was asked them |
+| [questions-unseen.md](questions-unseen.md) | thirty questions the owner did not write, committed before either arm was asked them |
 | [data/](data/CONTEXT.md) | the four Parquet files both arms query, with their row counts and sha256 |
 | [CLAUDE.md](CLAUDE.md) | the folder's entry: Claude Code loads it, and it routes to the rest |
 | [identity.md](identity.md) | who Zeteo is: an analyst that answers only from a query |
@@ -36,8 +43,10 @@ reading made unanswerable, every answer of both arms gave a number. The whole ac
 | [check/](check/CONTEXT.md) | a check that recomputes the numbers its registry lists against the data; copied into no run |
 | [results.md](results.md) | what changed, question by question, and what changed in the folder because of it |
 
-The folder is the five files `CLAUDE.md`, `identity.md`, `rules.md`, `examples.md` and
-`reference/`, plus `query.py`. This README is for people and is copied into no run.
+The five files the brief names all stand at the root: `identity.md`, `rules.md`, `examples.md`,
+`reference/` and this `README.md`. A run gets the first four and two more — `CLAUDE.md`, the entry
+Claude Code loads first, and `query.py`, the one door to the data — and never this README, which
+is for people. That set is `FOLDER` in [run/make_arm.sh](run/make_arm.sh), its one home.
 
 ## The data
 
@@ -101,12 +110,12 @@ Things to know before you compare:
   `05_rerun`) so that it writes beside the committed rounds. The control has no rounds: its
   transcripts land beside the committed ones and [`control/control.md`](control/control.md) is written again from the new
   sessions alone — `git diff` shows the old against the new.
-- The current folder is round 4's plus the code meanings and decisions added after it and the
-  fixes and readings made after the unseen run, which move none of the five answers; of the thirty,
-  B4 does not move by Sergey's reading of a closed order, and the folder now states the readings
-  A3's and A9's expected answers hold ([results.md](results.md), What changed). To re-run a round exactly, check out the commit it names (`679d0fb`, `b35316d`,
-  `aa8e82a` or `d85d39b`; `236cc9f` for the thirty unseen questions) in a separate worktree and use
-  the kit from there.
+- The folder on `main` is no recorded round's: code meanings, fixes and the owner's readings were
+  added after round 4 and after the unseen run ([results.md](results.md), What changed). None of
+  them moves the five answers. Of the thirty, B4 does not move, and the folder now states the
+  readings behind the expected answers of A3 and A9, both settled after the runs. To re-run a round
+  exactly, check out the commit it names (`679d0fb`, `b35316d`, `aa8e82a` or `d85d39b`; `236cc9f`
+  for the thirty unseen questions) in a separate worktree and use the kit from there.
 - Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),
   B6 ("this year so far"), C6 and C9 ("this year"). Their expected answers in
   [`questions-unseen.md`](questions-unseen.md) hold for 13 October 2026, the day both arms ran;
@@ -126,10 +135,19 @@ answers are wrong, and [results.md](results.md) says how.
 
 Build the treatment folder as above, `cd` into it, start `claude`, and ask in plain English.
 
-In a Claude Project, turn on code execution with network access for package managers (Settings →
+In a Claude Project, upload what `make_arm.sh` puts in the arm and nothing else:
+
+- the treatment: `CLAUDE.md`, `identity.md`, `rules.md`, `examples.md`, `query.py`, every file
+  of `reference/`, and the four `.parquet` files of `data/`;
+- the control: the four `.parquet` files alone.
+
+Leave out everything else, above all `questions.md`, `questions-unseen.md` and `results.md` (the
+expected answers), `control/` and `treatment/` (every recorded answer) and `check/` (the numbers
+the documents state). Turn on code execution with network access for package managers (Settings →
 Capabilities), so that `uv run query.py` can fetch `duckdb`; without it the sandbox cannot reach
-PyPI and the folder has no way to query the data. Tried by Sergey on 2026-10-13 with that access on:
-question 1 of [questions.md](questions.md) returned 3. No Project run is recorded in this repository.
+PyPI and the folder has no way to query the data. Tried by the owner on 2026-10-13 with that access
+on: question 1 of [questions.md](questions.md) returned 3. No Project run is recorded in this
+repository; the recorded runs are the Claude Code sessions above.
 
 Or query directly from this repository:
 
