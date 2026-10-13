@@ -46,7 +46,7 @@ type holds every priority.
 | `R5` | an order raised on the technicians' preventive rounds in the field | 54,902 |
 | `R6` | corrective maintenance, safety | 7,163 |
 
-## Reading result (`IK17_KG.text_code`) — plant (translated from Hebrew)
+## Reading result (`IK17_KG.text_code`) — plant
 
 | Value | Readings | Note |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ type holds every priority.
 | `Does not exist` | 1 | |
 | empty | 161 | |
 
-## Units (`IK17_KG.units`) — translated from Hebrew where they were Hebrew
+## Units (`IK17_KG.units`)
 
 `h` hours, `°C`, `m/s`, `pcs` pieces, `L` litres, `mm`, `BAR`, `PSI`, `%`, `A`, `V`, `Hz`, `g`,
 `Ω`, `N`, `RPM`, `N⋅m`, `m`. As exported, meanings from the plant (Sergey, 2026-10-13): `2MS`
@@ -94,7 +94,7 @@ shapes an answer. Match a code anywhere with `regexp_matches(field, '\bEXE\b')`.
 | `WPRV` | waiting for approval | plant |
 | `CNCL` | cancelled | plant |
 | `SCSH` | second shift | plant |
-| `Approved`, `Open`, `Closed`, `Refurbished`, `Frozen` | as the word says; translated from Hebrew, used alone | plant |
+| `Approved`, `Open`, `Closed`, `Refurbished`, `Frozen` | as the word says; used alone | plant |
 
 ## System status (`ZIW28_KG.notification_system_status`, `ZIW28_KG.order_system_status`, `ZW38_KG.system_status`)
 

@@ -256,8 +256,8 @@ start-up. Cost is the `totalCostUSD` Claude Code recorded.
   was in the folder before any run. The plant of Q3 and the date of Q3 were written after runs that
   showed what they would change. `REJC` (Q5) is decoded with confidence but scores the same.
 - **Most of the advantage was spent before the control ran.** The Parquet files the control got are
-  already cleaned: Hebrew values translated, misspelt headers corrected, dates typed. That work was
-  done for both arms, and it is likely why the control did so well. The raw exports, in Hebrew with
+  already cleaned: values in four columns normalised, misspelt headers corrected, dates typed. That
+  work was done for both arms, and it is likely why the control did so well. The raw exports, with
   headers such as `quantety` and `schedualed_end_date`, were never tested.
 - **A folder can move an answer the wrong way** (Q3, round 1) when a rule is written as a
   definition and the definition is wrong for the question.
@@ -276,7 +276,7 @@ start-up. Cost is the `totalCostUSD` Claude Code recorded.
 - The folder changed three times between treatment rounds. Two of the changes moved Q3 and were
   written after seeing it: round 4's 15th point was bought by a rule written after the answers and
   the key were known.
-- The data was cleaned for both arms (translation, header names, types). The raw exports are not
+- The data was cleaned for both arms (values, header names, types). The raw exports are not
   published and were never tested.
 - One run per cell per round; both arms ran on one machine with the same user-level Claude Code
   configuration, not a clean profile. The system Python there holds the `duckdb` package (0.9.2)

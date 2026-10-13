@@ -113,7 +113,7 @@ query directly from this repository:
 
 ## Limits
 
-- The data is cleaned for both arms: Hebrew values translated, misspelt headers corrected, types
-  set. The raw Excel exports are not published, and no arm was run on them.
+- The data is cleaned for both arms: values in four columns normalised, misspelt headers corrected,
+  types set. The raw Excel exports are not published, and no arm was run on them.
 - The questions and the folder's domain meanings come from one person, the data's owner.
 - One run per model per question per round, on one machine.

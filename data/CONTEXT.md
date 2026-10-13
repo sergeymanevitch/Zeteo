@@ -17,8 +17,9 @@ these files and nothing else from this folder: this `CONTEXT.md` is not copied i
 | [ZW38_KG.parquet](ZW38_KG.parquet) | 70,241 |
 
 Prepared on 2026-10-12 from four Excel exports that are not published. Changed, and nothing else:
-misspelt column names corrected, Hebrew values replaced by their English, dates typed as `DATE`,
-measures as `DOUBLE`, cost as `DECIMAL(18,2)`, priority as `INTEGER`. No row was added, removed or
+misspelt column names corrected, values in four columns normalised (`IK17_KG.text_code` and
+`units`, both user statuses), dates typed as `DATE`, measures as `DOUBLE`, cost as `DECIMAL(18,2)`,
+priority as `INTEGER`. No row was added, removed or
 repaired; codes and identifiers are text exactly as exported. The files are written by script and
 never edited by hand.
 
