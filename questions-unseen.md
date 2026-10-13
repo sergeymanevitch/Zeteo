@@ -54,7 +54,7 @@ A: 51.51 % (1,653 of 3,209, by `required_start_date`); 53.34 % of 3,099 by `crea
 ## A9
 
 Q: How many electrical notifications did plant 65 raise in Q2 2026?
-A: 51 (plant 65, discipline `E`); 171 under the department plant `65E` — Sergey to confirm which
+A: 171, the electrical department plant `65E` — Sergey's reading, given after both arms ran (2026-10-13); his Excel count read 172, the header row counted. By discipline `E` on plant 65: 51
 
 ## A10
 
