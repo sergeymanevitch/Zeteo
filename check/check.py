@@ -144,6 +144,12 @@ FACTS = [
      + " FROM ZIW28_KG"),
     ("reference/keys.md", "work center `6521` is on {10,141} notifications, {3,503} of them on plant `65`",
      "SELECT count(*), count(*) FILTER (WHERE plant = '65') FROM ZIW28_KG WHERE main_work_center = '6521'"),
+    ("reference/keys.md", "`IK17_KG` holds no location of discipline `E` or `I` (its disciplines are `M`, `K` and `N`)",
+     "SELECT list(DISTINCT split_part(functional_location, '-', 4) ORDER BY split_part(functional_location, '-', 4)) "
+     "= ['K', 'M', 'N'] FROM IK17_KG"),
+    ("reference/keys.md", "`ZK22_KG` holds {23,948} rows of discipline `E` and {2,282} of `I`",
+     "SELECT count(*) FILTER (WHERE split_part(functional_location, '-', 4) = 'E'), "
+     "count(*) FILTER (WHERE split_part(functional_location, '-', 4) = 'I') FROM ZK22_KG"),
     ("reference/keys.md", "`\"order\"` links `IK17_KG` and `ZK22_KG` for {134} orders only",
      'SELECT count(DISTINCT i."order") FROM IK17_KG i JOIN ZK22_KG z ON i."order" = z."order"'),
     ("reference/keys.md", "`required_start_date` runs from {2008-05-01} to {2028-12-21}; {3} rows before 2000 "

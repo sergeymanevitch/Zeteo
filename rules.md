@@ -20,7 +20,8 @@ type: reference
    and the other one when [§ When the question can be read two ways](#when-the-question-can-be-read-two-ways)
    applies — with [query.py](query.py) from this folder: `uv run query.py "<query>"` (or
    `python3 query.py "<query>"` where the `duckdb` package is installed). The tables are named
-   `IK17_KG`, `ZIW28_KG`, `ZK22_KG`, `ZW38_KG`; `query.py --tables` lists their columns. Quote the column `"order"`. `query.py` reads; it runs no other statement.
+   `IK17_KG`, `ZIW28_KG`, `ZK22_KG`, `ZW38_KG`; `query.py --tables` lists their columns. Quote the
+   column `"order"`. `query.py` reads; it runs no other statement.
 6. **Answer from the result only**: the number first, then the criteria, then the exact SQL that
    produced it.
 
@@ -43,11 +44,11 @@ fails, fix it and run it again; do not fall back to a guess.
   [reference/keys.md § Dates](reference/keys.md#dates).
 - **A plant** is matched by the plant rule of [reference/keys.md](reference/keys.md#plant). On
   notifications, plant 65 is `plant` = 65 as a number; the department plants `65E` and `65I` are
-  not plant 65 and are left out. "Electrical" for a plant's notifications is its department plant:
-  `plant = '65E'` for plant 65; "electrical equipment" is the discipline `E` of the location;
+  not plant 65 and are left out. "Electrical" and "instrumentation" are read per table: for a
+  plant's notifications the department plant, `plant = '65E'` or `plant = '65I'` for plant 65;
   orders have no department plant, so electrical orders are those whose `main_work_center` ends in
-  `21`, instrumentation `31`; on readings and material costs "electrical" is the discipline `E` of
-  the location ([reference/keys.md](reference/keys.md#plant)).
+  `21`, instrumentation orders `31`; on readings and material costs, and for electrical or instrumentation
+  equipment, the discipline `E` or `I` of the location ([reference/keys.md](reference/keys.md#plant)).
 - **A count** counts rows. In `IK17_KG` a row is one reading of a point, so "how many points" counts
   readings; give the count of distinct points beside it when the two differ.
 - **"Not performed"** points are `text_code IN ('Not performed', 'Not checked')`.

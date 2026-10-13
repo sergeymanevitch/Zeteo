@@ -14,7 +14,7 @@ type: reference
 | `D` | `D` | no meaning; every location starts with it |
 | plant | `88` | the plant |
 | area | `02` | an area inside the plant |
-| discipline | `M` | `M` mechanical, `E` electrical equipment, `I` instrumentation, `G` gas, `S` safety, `C` IT, `K` general, `N` HVAC and air conditioning, `P` piping; the owner's work centres on `M` |
+| discipline | `M` | `M` mechanical, `E` electrical equipment, `I` instrumentation equipment, `G` gas, `S` safety, `C` IT, `K` general, `N` HVAC and air conditioning, `P` piping; the owner's work centres on `M` |
 | equipment | `00700` | the equipment number: five digits, or four digits and a letter (`0261F`) |
 | unit | `/03` | the unit in a row of that equipment: `/03` is the third |
 
@@ -39,8 +39,10 @@ work done in plant 65. They are **not** counted as plant 65: a question about pl
 rows whose `plant` is `65` and nothing else (Sergey, 2026-10-12). "Electrical" for a plant's
 notifications means its department plant with the letter `E`: electrical notifications of plant 65 are
 `plant = '65E'` in `ZIW28_KG` (Sergey, 2026-10-13). "Electrical equipment" is the discipline
-letter `E` of a functional location, its 4th segment (Sergey, 2026-10-13). Plants are numbers: `010` is
-plant 10 and `1` is plant 01, so compare them as integers. For plant 65:
+letter `E` of a functional location, its 4th segment (Sergey, 2026-10-13). "Instrumentation"
+(controllers) is read the same way: instrumentation notifications of plant 65 are `plant = '65I'`,
+and instrumentation equipment is the discipline `I` of a location (Sergey, 2026-10-13). Plants are
+numbers: `010` is plant 10 and `1` is plant 01, so compare them as integers. For plant 65:
 
     try_cast(plant AS INTEGER) = 65                                                              -- ZIW28_KG
     split_part(functional_location, '-', 2) = '65'                                               -- IK17_KG, ZK22_KG
@@ -63,8 +65,8 @@ The last two digits of a work center name its trade: `21` electrical, `31` instr
 are its orders whose `main_work_center` ends in `21` (`1321`, `5621`, `8821` in `ZW38_KG`) and its
 instrumentation orders those ending in `31` (`8831`). Only plants 13, 56 and 88 have such an
 electrical work center among their orders, and only 88 an instrumentation one; for the other plants
-the count is 0. On notifications "electrical" stays the department plant, above. The department
-plants mostly carry the matching work center: of the notifications of `65E`, 6,223 of 6,494 have
+the count is 0. On notifications "electrical" and "instrumentation" stay the department plant,
+above. The department plants mostly carry the matching work center: of the notifications of `65E`, 6,223 of 6,494 have
 work center `6521`; `64E` 853 of 880 `6421`; `43E` 187 of 224 `4321`; `32E` 171 of 230 `3221`;
 `88E` 7 of 16 `8821`; of `65I`, 3,890 of 4,087 have `6531`; `43I` 552 of 604 `4331`; `32I` 356 of
 463 `3231`; `64I` 177 of 206 `6431`; `88I` 16 of 26 `8831`. Not the other way: work center `6521`
@@ -73,7 +75,9 @@ plant, not the work center.
 
 Readings (`IK17_KG`) and material costs (`ZK22_KG`) carry neither a department plant nor a work
 center, so on them "electrical" is the discipline `E` of the functional location, its 4th segment
-(`D-65-02-E-…`) (Sergey, 2026-10-13).
+(`D-65-02-E-…`), and "instrumentation" the discipline `I` (`D-65-02-I-…`) (Sergey, 2026-10-13).
+`IK17_KG` holds no location of discipline `E` or `I` (its disciplines are `M`, `K` and `N`), so on
+readings both count 0; `ZK22_KG` holds 23,948 rows of discipline `E` and 2,282 of `I`.
 
 ## Joins
 

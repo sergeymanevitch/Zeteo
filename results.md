@@ -458,6 +458,14 @@ electrical locations, "being executed" as the SAP in-process status — the two 
 
   Effect on the recorded answers: none — no question of the five or the thirty asks for electrical
   readings or costs, and step 5 changes no number, only how many queries an answer runs.
+- **After the unseen run, one more reading of Sergey's** on 2026-10-13: "instrumentation"
+  (controllers) is read per table as "electrical" is — notifications the department plant
+  `<plant>I` (`65I` for plant 65), orders a work center ending `31` (written before), readings and
+  material costs the location's discipline `I`, and instrumentation equipment the discipline `I`
+  ([reference/keys.md § Plant](reference/keys.md#plant), pointer in [rules.md](rules.md)). No answer
+  was re-run. Effect on the recorded answers: none — no question of the five or the thirty uses the
+  word instrumentation or controllers; B8 names work center `6531`, which this reading does not
+  touch.
 
 ## What this says, and what it does not
 
