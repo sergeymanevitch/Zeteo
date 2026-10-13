@@ -18,7 +18,9 @@ of this workspace reaches either.
 
 ## Inputs
 
-- [../questions.md](../questions.md): the prompts, the text after each `Q:` marker.
+- [../questions.md](../questions.md): the prompts, the text after each `Q:` marker. Another file
+  of the same shape, such as [../questions-unseen.md](../questions-unseen.md), is named by the
+  `QUESTIONS` variable to both `ask.sh` and `collect.py`; `q<N>` is then its N-th question.
 - [../data/](../data/CONTEXT.md): the Parquet files both arms get.
 - For the treatment, the folder files listed in `FOLDER` of [make_arm.sh](make_arm.sh), their one
   home.

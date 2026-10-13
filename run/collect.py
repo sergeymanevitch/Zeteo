@@ -4,6 +4,8 @@
     python3 run/collect.py treatment ~/zeteo-runs/treatment-2 02_plant-rule
 
 An optional third argument names a round folder inside the arm, for an arm run more than once.
+QUESTIONS names another questions file in the repository root, as for run/ask.sh; q<N> is then
+the N-th question of that file.
 
 Reads every Claude Code session recorded for ARM_DIR (~/.claude/projects/<ARM_DIR encoded>/).
 Writes <arm>[/<round>]/raw/<model>/q<N>-<session>.jsonl, each a byte copy, and <arm>.md beside raw/.
@@ -24,7 +26,7 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 
 
 def questions():
-    text = (REPO / "questions.md").read_text(encoding="utf-8")
+    text = (REPO / os.environ.get("QUESTIONS", "questions.md")).read_text(encoding="utf-8")
     return [line[3:].strip() for line in text.splitlines() if line.startswith("Q: ")]
 
 
