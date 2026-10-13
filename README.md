@@ -17,6 +17,7 @@ got. The whole account, losses and ties included: [results.md](results.md).
 | Path | What it is |
 | --- | --- |
 | [questions.md](questions.md) | five questions with the expected answers, committed before anything else (`fe7a35b`) |
+| [questions-unseen.md](questions-unseen.md) | thirty questions the author did not write, committed before either arm was asked them |
 | [data/](data/CONTEXT.md) | the four Parquet files both arms query, with their row counts and sha256 |
 | [CLAUDE.md](CLAUDE.md) | the folder's entry: Claude Code loads it, and it routes to the rest |
 | [identity.md](identity.md) | who Zeteo is: an analyst that answers only from a query |
