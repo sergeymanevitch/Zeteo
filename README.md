@@ -39,8 +39,9 @@ Four SAP exports from one company's plant maintenance: 435,958 notifications, 70
 a slice prepared for this competition, kept to the minimum, but they hold the main, high-volume
 part of the work — the tables a maintenance planner queries every day — so the folder is built and
 tested on data at real volume, not on a sample. Some questions a planner asks need data that is not
-here: whether a notification's work was done on time, for one, needs a completion date no export
-carries. The folder says so instead of answering.
+here: whether a notification's work was done on time, for one — the day the work was reported
+performed is there, but not what "on time" is measured against. The folder says so instead of
+answering.
 
 ## How the experiment ran
 
@@ -89,8 +90,10 @@ Things to know before you compare:
   `05_rerun`) so that it writes beside the committed rounds. The control has no rounds: its
   transcripts land beside the committed ones and [`control/control.md`](control/control.md) is written again from the new
   sessions alone — `git diff` shows the old against the new.
-- The current folder is round 4's. To re-run an earlier round, check out the commit the round names
-  (`679d0fb`, `b35316d` or `aa8e82a`) in a separate worktree and use the kit from there.
+- The current folder is round 4's plus the code meanings added after it, which move none of the
+  five answers ([results.md](results.md), What changed). To re-run a round exactly, check out the
+  commit it names (`679d0fb`, `b35316d`, `aa8e82a` or `d85d39b`) in a separate worktree and use
+  the kit from there.
 - The control's sessions explored the files with whatever was installed: pandas and pyarrow on the
   recording machine, plus the DuckDB CLI 1.5.6 and a system Python holding `duckdb` 0.9.2. The
   treatment needs only [`query.py`](query.py) from round 3 on.

@@ -45,8 +45,11 @@ fails, fix it and run it again; do not fall back to a guess.
 - **A completed order** has `TECO` in `system_status`, or `CMPL` without `NCMP`; `CMPL` with
   `NCMP` is an order closed without the work being done
   ([reference/codes.md](reference/codes.md), under the system status).
-- **A status** "has" a code when the code appears anywhere in the status field, which may hold
-  several codes. When one notification number has more than one row, report every row with its
+- **A status** field may hold several codes. In a system status the first code from the left is
+  the current status and the rest are history: "orders released" reads the first code, "orders
+  delayed for lack of people" looks for `MSCP` anywhere ([reference/codes.md](reference/codes.md),
+  under the system status). A user status "has" a code when the code appears anywhere in it. When
+  one notification number has more than one row, report every row with its
   notification system status, user status and order system status. Decode every code you report with [reference/codes.md](reference/codes.md).
 
 ## When the question can be read two ways

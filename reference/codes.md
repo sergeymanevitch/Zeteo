@@ -5,8 +5,9 @@ type: reference
 
 # Codes — what the values mean
 
-Source of each meaning: **plant** — given by the plant's maintenance engineer; **SAP** — SAP
-standard meaning, not verified on this system; **unknown** — nobody has documented it. Never
+Source of each meaning: **plant** — given by the plant's maintenance engineer; **SAP** — the SAP
+standard meaning, which the plant uses as it stands (Sergey, 2026-10-13); **unknown** — nobody has
+documented it. Never
 invent a meaning for an unknown code; report the code as stored and say it is undocumented.
 
 ## Priority (`priority` in `ZIW28_KG` and `ZW38_KG`) — plant
@@ -32,10 +33,18 @@ How urgently the work must be done. Empty on 66,183 notifications and 33,187 ord
 | `RPM7` | root cause analysis (RCA) | 33 |
 | `1126` | unknown | 10 |
 
-## Notification type (`ZIW28_KG.notification_type`) — unknown
+## Notification type (`ZIW28_KG.notification_type`) — plant
 
-`R1` 292,084, `R2` 80,833, `R3` 976, `R5` 54,902, `R6` 7,163. A classifier for filtering, almost
-never used. It is **not** the urgency: every type holds every priority.
+The type of order the notification is for (Sergey, 2026-10-13). It is **not** the urgency: every
+type holds every priority.
+
+| Code | Meaning | Notifications |
+| --- | --- | --- |
+| `R1` | corrective maintenance | 292,084 |
+| `R2` | preventive maintenance | 80,833 |
+| `R3` | root cause problem elimination | 976 |
+| `R5` | an order raised on the technicians' preventive rounds in the field | 54,902 |
+| `R6` | corrective maintenance, safety | 7,163 |
 
 ## Reading result (`IK17_KG.text_code`) — plant (translated from Hebrew)
 
@@ -55,8 +64,9 @@ never used. It is **not** the urgency: every type holds every priority.
 ## Units (`IK17_KG.units`) — translated from Hebrew where they were Hebrew
 
 `h` hours, `°C`, `m/s`, `pcs` pieces, `L` litres, `mm`, `BAR`, `PSI`, `%`, `A`, `V`, `Hz`, `g`,
-`Ω`, `N`, `RPM`, `N⋅m`, `m`. As exported and undocumented: `2MS`, `M3H` (reads as m³/h), `LMN`
-(reads as l/min). Empty on 74 readings.
+`Ω`, `N`, `RPM`, `N⋅m`, `m`. As exported, meanings from the plant (Sergey, 2026-10-13): `2MS`
+millimetres per second squared (3,555 readings), `M3H` cubic metres per hour (2,172), `LMN` litres
+per minute (1,733). Empty on 74 readings.
 
 ## User status (`ZIW28_KG.notification_user_status`, `ZW38_KG.user_status`)
 
@@ -71,19 +81,40 @@ spaces on orders (`PLAN EXE  COMP`). Match a code with `regexp_matches(field, '\
 | `COMP` | completed | plant |
 | `REJC` | rejected | plant |
 | `WFAP` | waiting for approval | plant |
-| `ITEM`, `CRPA` | awaiting material or parts (which one is set depends on the combination of keys) | plant |
+| `ITEM`, `CRPA` | awaiting material or parts | plant |
+| `CDON` | closed by a contractor | plant |
+| `PMBK` | the central planned maintenance department | plant |
+| `RPLN` | for re-planning | plant |
+| `IMPR` | improvement works | plant |
+| `WFD` | waiting for additional information or documentation | plant |
+| `WPRV` | waiting for approval | plant |
+| `CNCL` | cancelled | plant |
+| `SCSH` | second shift | plant |
 | `Approved`, `Open`, `Closed`, `Refurbished`, `Frozen` | as the word says; translated from Hebrew, used alone | plant |
-| `CDON`, `PMBK`, `RPLN`, `IMPR`, `WFD`, `CNCL`, `WPRV`, `SCSH` | — | unknown |
 
 ## System status (`ZIW28_KG.notification_system_status`, `ZIW28_KG.order_system_status`, `ZW38_KG.system_status`)
 
-Codes separated by spaces. `order_system_status` on notifications is the status of the order
-attached to the notification; it is empty on the 32,639 notifications that have no order.
+Codes separated by spaces; on `ZIW28_KG.order_system_status`, by commas. `order_system_status` on
+notifications is the status of the order attached to the notification; it is empty on the 32,639
+notifications that have no order.
+
+**The first code from the left is the current status; the codes after it are history** (Sergey,
+2026-10-13). `TECO PRT GMPS MACM PRC SETC` is an order that is technically completed now. A
+question about the status something is in ("orders released", "notifications in process") reads
+the first code:
+
+    regexp_extract(system_status, '^\s*([^ ,]+)', 1) = 'REL'
+
+A question about what happened on the way ("orders delayed for lack of people") looks for the code
+anywhere in the field, `regexp_matches(system_status, '\bMSCP\b')`. The first code is `NOCO`,
+`NOPR`, `NOPO`, `ATCO`, `OSNO` or `DLFL` on notifications, and `TECO`, `CMPL`, `CRTD`, `REL` or
+`LKD` on orders.
 
 **A completed order** (Sergey, 2026-10-13) has `TECO` in `ZW38_KG.system_status`, or `CMPL`
 without `NCMP`. An order with both `CMPL` and `NCMP` was closed without the work being done and is
 not completed. In the data: 62,493 orders with `TECO`, 5,024 with `CMPL` and `NCMP`, 142 with
-`CMPL` alone; no order holds `TECO` with either.
+`CMPL` alone; no order holds `TECO` with either. `CMPL` is always the first code; `TECO` is first on
+61,832 orders and second, after `LKD` (locked), on the other 661 — they count as completed.
 
     regexp_matches(system_status, '\bTECO\b')
       OR (regexp_matches(system_status, '\bCMPL\b') AND NOT regexp_matches(system_status, '\bNCMP\b'))
@@ -117,7 +148,13 @@ not completed. In the data: 62,493 orders with `TECO`, 5,024 with `CMPL` and `NC
 | `PRT` | printed | SAP |
 | `PPRT` | partially printed | SAP |
 | `LKD` | locked | SAP |
-| `SSAP`, `RELR`, `NTUP`, `MSCP`, `MSPT`, `MSPR`, `GMCO` | — | unknown |
+| `SSAP` | object created (internal to SAP) | plant |
+| `RELR` | the release was postponed | plant |
+| `NTUP` | the dates are not updated | plant |
+| `MSCP` | not enough people (human resources) | plant |
+| `MSPT` | not enough materials | plant |
+| `MSPR` | not enough people, tools or heavy equipment | plant |
+| `GMCO` | material movement in a collaborative order | plant |
 
 `ZIW28_KG.order_system_status` was cut short in the export: the fragments `NMA`, `MAC`, `MA`, `MAN`,
 `N`, `NM`, `NT`, `SSA`, `SS`, `S`, `GMP`, `GM`, `G`, `CSE`, `CS`, `C`, `M` are truncated codes. A

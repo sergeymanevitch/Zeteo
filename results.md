@@ -236,6 +236,16 @@ start-up. Cost is the `totalCostUSD` Claude Code recorded.
   ahead; "done on time" declared unanswerable, since no column holds when a notification's work was
   done; three examples added. Effect: Q3 19.98 → 22.19; Q1 gained an other reading (6, scheduled);
   nothing else moved.
+- **After round 4, not because of an answer:** the meanings of every code the folder had marked
+  unknown, from Sergey on 2026-10-13 — notification types `R1`–`R6` (the type of order: corrective,
+  preventive, root cause, from the technicians' rounds, safety), eight user statuses, seven system
+  statuses (`MSCP` not enough people, `NTUP` dates not updated, …), three units, four disciplines;
+  the SAP-standard codes confirmed as used. With them: in a system status the first code is the
+  current status and the rest history; `reference_date` is the day the work was reported performed;
+  a location's plant is where the equipment stands and `plant` who is in charge; `88`, `80`, `81`
+  and `8100` are sub-plants of one plant. Effect on the five answers: none by query — no question
+  reads a system status, a discipline or those plants, and Q5's user status holds one code. No
+  round was run on it. Order type `1126` stays unknown.
 
 ## What this says, and what it does not
 
