@@ -130,6 +130,14 @@ query directly from this repository:
     uv run query.py --tables
     uv run query.py "SELECT count(*) FROM ZIW28_KG WHERE priority = 1"
 
+In PowerShell an argument can lose the double quotes of `"order"`, and the query fails. Pass the query
+on standard input instead, as UTF-8 without a byte-order mark:
+
+    $OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+    @'
+    SELECT count(*) FROM ZK22_KG WHERE "order" = '1000097414'
+    '@ | python query.py -
+
 To check that the numbers the folder states still hold against the data — the worked examples,
 the stated counts of [reference/](reference/CONTEXT.md), [data/](data/CONTEXT.md) and the data
 section above, and the SQL rules written the same way everywhere — run `uv run check/check.py`

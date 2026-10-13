@@ -21,7 +21,10 @@ type: reference
    applies — with [query.py](query.py) from this folder: `uv run query.py "<query>"` (or
    `python3 query.py "<query>"` where the `duckdb` package is installed). The tables are named
    `IK17_KG`, `ZIW28_KG`, `ZK22_KG`, `ZW38_KG`; `query.py --tables` lists their columns. Quote the
-   column `"order"`. `query.py` reads; it runs no other statement.
+   column `"order"`. `query.py` reads; it runs no other statement. In PowerShell, which can drop the
+   double quotes of `"order"` from an argument, pass the query on standard input instead: set
+   `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)` once, then pipe a here-string to
+   `query.py -`.
 6. **Answer from the result only**: the number first, then the criteria, then the exact SQL that
    produced it.
 

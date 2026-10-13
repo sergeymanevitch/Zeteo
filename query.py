@@ -7,7 +7,7 @@
     uv run query.py "SELECT count(*) FROM ZIW28_KG WHERE priority = 1"
     python3 query.py "..."          # where the duckdb package is installed
     uv run query.py --tables        # every table and its columns
-    echo "SELECT ..." | uv run query.py -
+    echo "SELECT ..." | uv run query.py -     # standard input, read as UTF-8
 
 The four Parquet files of data/ are loaded as tables named after their files: IK17_KG, ZIW28_KG,
 ZK22_KG, ZW38_KG. After loading, the database is closed to the file system, so a query can read
@@ -84,7 +84,8 @@ def main():
             count = con.execute(f'SELECT count(*) FROM "{table}"').fetchone()[0]
             print(f"{table} ({count} rows): " + ", ".join(c for (c,) in cols))
         return
-    sql = sys.stdin.read() if args == ["-"] else " ".join(args)
+    # Standard input is read as UTF-8 whatever the locale, and a leading byte-order mark is dropped.
+    sql = sys.stdin.buffer.read().decode("utf-8-sig") if args == ["-"] else " ".join(args)
     sql = sql.strip().rstrip(";").strip()
     if not one_read(con, sql):
         sys.exit("query.py runs one query that reads (SELECT, WITH, DESCRIBE, SUMMARIZE, SHOW)")

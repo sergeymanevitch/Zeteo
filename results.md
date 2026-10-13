@@ -466,6 +466,15 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   was re-run. Effect on the recorded answers: none — no question of the five or the thirty uses the
   word instrumentation or controllers; B8 names work center `6531`, which this reading does not
   touch.
+- **After the unseen run, not because of an answer:** a report from a Windows computer on
+  2026-10-13. In PowerShell, `query.py "..."` lost the double quotes of `"order"` and the query
+  failed. [query.py](query.py) now reads standard input as UTF-8 whatever the locale and drops a
+  leading byte-order mark, and [rules.md](rules.md) step 5 says to pass the query on standard input
+  in PowerShell, with `$OutputEncoding` set to UTF-8 without a byte-order mark. Tested by Sergey in
+  Windows PowerShell before the `query.py` change: the query on `"order"` returned 20 and one on
+  `units = '°C'` 108,596, as on the Mac, once `$OutputEncoding` was set that way and `PYTHONUTF8`
+  was 1; with the default encoding the `°C` query returned 0, and a byte-order mark made `query.py`
+  refuse the query. Effect on the recorded answers: none — every run was on a Mac.
 
 ## What this says, and what it does not
 
