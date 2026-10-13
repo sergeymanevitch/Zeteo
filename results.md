@@ -14,8 +14,9 @@ about a third faster and **15–21 % dearer**, not cheaper as its first three ro
 Most of what made no folder good was spent before the control ran: on cleaning the data both arms
 got.
 
-**On thirty questions its author did not write, the folder got 82 of 90 answers right and no folder
-49** (§ Thirty questions the author did not write). On the eleven questions that need no reading
+**On thirty questions its author did not write, the folder got 80 of 90 answers right and no folder
+49** (§ Thirty questions the author did not write) — 82 against 49 by the key as it stood when the
+arms ran; the owner changed A3's key after the runs. On the eleven questions that need no reading
 of the data's meaning, every model in both arms was right. The lead is the owner's meanings — which
 date a month means, when a notification is completed, which status is current — and one honest
 habit: asked for what the data does not hold, no folder made a number up in five answers of six,
@@ -240,21 +241,27 @@ changed. All 180 sessions are committed, none repeated.
 query, with the folder's definitions — the meanings the owner gave. One answer, A9, was settled by
 the owner after both arms had run: "electrical notifications of plant 65" is the electrical
 department plant `65E`, 171 (his own Excel count read 172, the header row counted again). The
-folder had read it as discipline `E` on plant 65 and lost it.
+folder had read it as discipline `E` on plant 65 and lost it. A second, A3, was changed by the owner
+after both arms had run: what is being executed right now cannot be answered from these tables — it
+needs the order operations of SAP transaction IW37N — and `EXE` as the first user-status code means
+cleared for execution, not being executed. The key had read 5 (`EXE` the current user status). Both
+grades are given below: by the key as it stands, and by the key as it stood when the arms ran.
 
 Graded by the build agent from the final replies: **✓** the main answer is the key's; **≈** the main
 answer is the other reading the key gives beside it (almost always another date); **✗** neither.
 
 | | Haiku | Sonnet | Opus | ✓ | ✓ or ≈ |
 | --- | --- | --- | --- | --- | --- |
-| no folder | 15 ✓ · 9 ≈ · 6 ✗ | 16 · 11 · 3 | 18 · 8 · 4 | **49 / 90** | 77 / 90 |
-| folder | 27 · 1 · 2 | 27 · 2 · 1 | 28 · 1 · 1 | **82 / 90** | 86 / 90 |
+| no folder | 15 ✓ · 8 ≈ · 7 ✗ | 16 · 10 · 4 | 18 · 8 · 4 | **49 / 90** | 75 / 90 |
+| folder | 26 · 1 · 3 | 26 · 2 · 2 | 28 · 1 · 1 | **80 / 90** | 84 / 90 |
+| no folder, A3 by the key as it stood at the run | 15 · 9 · 6 | 16 · 11 · 3 | 18 · 8 · 4 | 49 / 90 | 77 / 90 |
+| folder, A3 by the key as it stood at the run | 27 · 1 · 2 | 27 · 2 · 1 | 28 · 1 · 1 | 82 / 90 | 86 / 90 |
 
 | # | Tests | No folder H · S · O | Folder H · S · O | What decided it |
 | --- | --- | --- | --- | --- |
 | A1 | released date | ✓✓✓ | ✓✓✓ | |
 | A2 | department plant `64E` | ✓✓✓ | ≈✓✓ | folder Haiku took the default date though the question says "raise" |
-| A3 | current status | ≈≈✗ | ✓✓✗ | first code from the left (5); no folder counted `EXE` anywhere (130); folder Opus read "being executed" as `NOPR` (251) |
+| A3 | being executed now — cannot be answered | ✗✗✗ (was ≈≈✗) | ✗✗✗ (was ✓✓✗) | the owner's reading after the runs: it needs IW37N. Every answer gave a number: no folder `EXE` anywhere (130; Opus 20, in process too), folder Haiku and Sonnet `EXE` first (5, the key as it stood), folder Opus `NOPR` (251) |
 | A4 | rows or distinct points | ≈≈✓ | ✓✓✓ | no folder Haiku and Sonnet counted only points with a measured value (8) |
 | A5 | a completed order | ✓≈✓ | ✓✓✓ | `CMPL` without `NCMP` counts |
 | A6 | out of limits | ✓✓≈ | ✓✓✓ | no folder Opus dropped duplicates and swapped limits (132) |
@@ -299,14 +306,18 @@ What the thirty show:
 
 - **Plain questions need no folder.** Eleven need no reading of the data's meaning (A1, A7, A10,
   B3, B5, B7, C2, C5, C7, C9, C10); all 66 answers to them are right in both arms.
-- **The lead is the owner's meanings.** 21 of no folder's 28 ≈ are the default date alone: it
+- **The lead is the owner's meanings.** 21 of no folder's 26 ≈ are the default date alone: it
   read every period by the day a notification was opened, the owner reads it by the day the work
-  is required. Counting ≈ as right, the gap narrows to 86 against 77.
+  is required. Counting ≈ as right, the gap narrows to 84 against 75 (86 against 77 by the key as
+  it stood at the run).
 - **The folder says "cannot" where the data cannot.** On B9 and B10 no folder produced a number in
   five answers of six — an on-time percentage on a date that is only the scheduled one copied, and
-  a labour cost reverse-engineered from hourly rates. The folder did so once.
+  a labour cost reverse-engineered from hourly rates. The folder did so once. On A3, which only
+  the owner's reading after the runs made unanswerable, all six answers of both arms gave a number.
 - **Where the folder has no rule, it guesses like anyone.** A9 ("electrical") and A3 ("being
-  executed") are readings the folder does not fix, and it lost both, A9 to no folder.
+  executed") were readings the folder did not fix when it ran, and it lost both: A9 to no folder,
+  A3 with every answer of both arms. Both are in the folder now (§ What changed); no round was run
+  on them.
 
 Sergey also ran the treatment folder on the thirty questions on another computer, all in one
 Claude Opus session, in about four minutes. Only the answers file exists, no transcript, so the
@@ -423,7 +434,8 @@ electrical locations, "being executed" as the SAP in-process status — the two 
 - **A folder does not remove variance.** Rounds 1–3 gave the same number on all three models on
   every question; round 4's Haiku then broke a rule that had not changed (Q2).
 - **The folder buys speed and pays for it.** A third faster, a sixth to a fifth dearer.
-- **On questions its author did not write, the lead holds:** 82 of 90 against 49, and every point
+- **On questions its author did not write, the lead holds:** 80 of 90 against 49 (82 by the key as
+  it stood at the run), and every point
   of it is a meaning the owner gave or an honest "cannot". On plain questions the arms tie.
 
 ## Known flaws in this comparison
@@ -450,10 +462,10 @@ electrical locations, "being executed" as the SAP in-process status — the two 
 - Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),
   B6 ("this year so far"), C6 and C9 ("this year"). Their expected answers hold for 13 October 2026,
   the day both arms ran, as [questions-unseen.md](questions-unseen.md) says, and only for that day:
-  a re-run on another day has other right numbers. A3 ("right now"), B7 ("still open") and B8
-  ("still outstanding") read the status the export holds, which does not change, so they do not
-  move.
+  a re-run on another day has other right numbers. B7 ("still open") and B8 ("still outstanding")
+  read the status the export holds, which does not change, so they do not move; A3 ("right now")
+  cannot be answered from this data on any day.
 - The five questions were written by the data's owner. The thirty unseen ones were written by a
   separate session, but their expected answers were computed by the folder's author with the
-  folder's definitions, A9's was settled after the runs, and the grading (✓, ≈, ✗) is the build
+  folder's definitions, A9's and A3's were settled after the runs, and the grading (✓, ≈, ✗) is the build
   agent's reading of each final reply.

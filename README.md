@@ -10,8 +10,9 @@ because the key is itself wrong three times. By what the data says, no folder go
 folder 12, then 14 in its last round — every point from a domain meaning the questions' author
 supplied, one of them written after the runs. The folder is a third faster and a sixth dearer, and
 most of what made no folder good was spent before the control ran, on cleaning the data both arms
-got. On thirty questions the author did not write, the folder got 82 of 90 answers right and no
-folder 49: the arms tie on plain questions, and the lead is the owner's meanings and an honest
+got. On thirty questions the author did not write, the folder got 80 of 90 answers right and no
+folder 49 (82 against 49 by the key as it stood when the arms ran; the owner changed one answer
+after): the arms tie on plain questions, and the lead is the owner's meanings and an honest
 "cannot" where the data holds no answer. The whole account, losses and ties included:
 [results.md](results.md).
 
@@ -108,9 +109,9 @@ Things to know before you compare:
 - Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),
   B6 ("this year so far"), C6 and C9 ("this year"). Their expected answers in
   [`questions-unseen.md`](questions-unseen.md) hold for 13 October 2026, the day both arms ran;
-  asked on another day, a right answer is another number. A3 ("right now"), B7 ("still open") and
-  B8 ("still outstanding") read the status the export holds, and the export does not change, so
-  they do not move.
+  asked on another day, a right answer is another number. B7 ("still open") and B8 ("still
+  outstanding") read the status the export holds, and the export does not change, so they do not
+  move; A3 ("right now") cannot be answered from this data on any day.
 - The control's sessions explored the files with whatever was installed: pandas and pyarrow on the
   recording machine, plus the DuckDB CLI 1.5.6 and a system Python holding `duckdb` 0.9.2. The
   treatment needs only [`query.py`](query.py) from round 3 on.
