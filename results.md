@@ -353,6 +353,36 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   2026-10-13, a completed notification (`NOCO` first), durations in calendar days, relative periods
   read as the user names them and compared like with like. Effect on the five answers: none — no
   question asks about any of them. No round was run on it.
+- **After the unseen run, not because of an answer:** fixes from a review of the folder on
+  2026-10-13, approved by Sergey. No answer was re-run on them.
+  - `closed_on` was stated wrongly in [reference/zw38.md](reference/zw38.md) and
+    [reference/keys.md § Dates](reference/keys.md#dates): a closing day on `TECO` orders only, and
+    a value running into the future on the 7,748 others. Measured: it is the closing day on every
+    closed order — `TECO` 62,493, `CMPL` with `NCMP` 5,024, `CMPL` alone 142, none later than
+    2026-10-13 — and no closing day on the 2,582 orders that are neither (first code `CRTD` 1,912,
+    `REL` 669, `LKD` 1), 320 of them later than 2026-10-13, up to 2027-11-18. Which closed orders
+    are completed stays the definition of [reference/codes.md](reference/codes.md).
+  - What it means for B4 (plant 32, orders closed in Q2 2026): 357 orders with `TECO`, median 49
+    days — the key and every folder answer; none with `CMPL` alone; 2 with `CMPL` and `NCMP`, which
+    make 359 with the same median, 49; the 24 orders that are neither and carry a Q2 `closed_on` stay
+    out under both texts. The recorded answers hold for completed orders; counting the orders closed
+    without the work done moves the count to 359 and not the median. Whether "orders closed"
+    includes them is a meaning left to Sergey; the B4 row above stays as recorded.
+  - [identity.md](identity.md) said Zeteo turns the criteria into "one SQL query", while
+    [rules.md](rules.md) asks for the other reading's number too; it now says one query for each
+    reading.
+  - [query.py](query.py) pins `duckdb` 1.5.6 instead of any version from 1.0. The recorded runs did
+    not record which version `uv` fetched.
+  - [reference/codes.md](reference/codes.md) said a stray `*` stands in `ZW38_KG.system_status` on
+    15 orders; it is on 16, on one of them glued to `NTUP`. Found by [check/](check/CONTEXT.md),
+    added with these fixes outside the folder, which recomputes every number the folder states about
+    the data and fails when a document and the data disagree.
+
+  Effect on the recorded answers: none of the five reads `closed_on` or a stray `*`. Of the thirty,
+  B4 would move its count and not its median, as above, under the reading that counts orders closed
+  without the work done; the folder's B9 answers cite `closed_on` as a closing day on `TECO` orders
+  only, which does not change their verdict, that the question cannot be answered. Nothing else
+  reads what changed.
 
 ## What this says, and what it does not
 
@@ -394,6 +424,11 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   the fair ones.
 - Round 4 was launched by the build agent from a cleaned environment, the other runs by Sergey
   from his terminal.
+- Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),
+  B6 ("this year so far"), C6 and C9 ("this year"). Their expected answers hold for 13 October 2026,
+  the day both arms ran; a re-run on another day has other right numbers, and the key does not say
+  so. A3 ("right now"), B7 ("still open") and B8 ("still outstanding") read the status the export
+  holds, which does not change, so they do not move.
 - The five questions were written by the data's owner. The thirty unseen ones were written by a
   separate session, but their expected answers were computed by the folder's author with the
   folder's definitions, A9's was settled after the runs, and the grading (✓, ≈, ✗) is the build

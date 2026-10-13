@@ -168,4 +168,4 @@ not completed. In the data: 62,493 orders with `TECO`, 5,024 with `CMPL` and `NC
 `ZIW28_KG.order_system_status` was cut short in the export: the fragments `NMA`, `MAC`, `MA`, `MAN`,
 `N`, `NM`, `NT`, `SSA`, `SS`, `S`, `GMP`, `GM`, `G`, `CSE`, `CS`, `C`, `M` are truncated codes. A
 code may therefore be missing from the end of that field. `ZW38_KG.system_status` also holds a
-stray `*` on 15 orders.
+stray `*` on 16 orders, on one of them glued to the code before it (`NTUP*`).

@@ -109,7 +109,7 @@ then completed — completed as [codes.md](codes.md) defines it under the system
 | released | `released_on` |
 | when work actually started | `actual_start_date` (empty on most orders; say how many have none) |
 | actually ended | `actual_end_date` — it equals `scheduled_end_date` when the order was done on its scheduled day, which is 70,238 of 70,241 rows |
-| closed, technically completed | `closed_on`, on orders with `TECO` only ([zw38.md](zw38.md)) |
+| closed, technically completed | `closed_on`, the closing day on closed orders — `TECO`, or `CMPL` with or without `NCMP` — and no closing day on the 2,582 others ([zw38.md](zw38.md)); which closed orders are completed: [codes.md](codes.md), under the system status |
 
 `created_on` runs from 2018-05-03 to 2026-10-08. `actual_start_date_2` is described in
 [zw38.md](zw38.md) and used only when named.

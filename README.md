@@ -31,6 +31,7 @@ folder 49: the arms tie on plain questions, and the lead is the owner's meanings
 | [control/](control/control.md) | the run without the folder, raw transcripts and a summary; `unseen/` the same on the thirty questions |
 | [treatment/](treatment/CONTEXT.md) | the runs with the folder — four rounds and the thirty questions, raw transcripts and a summary each |
 | [run/](run/CONTEXT.md) | the kit that builds each arm, asks the questions and records the sessions |
+| [check/](check/CONTEXT.md) | a check that recomputes every number the folder states about the data; copied into no run |
 | [results.md](results.md) | what changed, question by question, and what changed in the folder because of it |
 
 The folder is the five files `CLAUDE.md`, `identity.md`, `rules.md`, `examples.md` and
@@ -63,8 +64,9 @@ says what changed and why.
 Requirements:
 
 - [Claude Code](https://claude.com/claude-code), logged in. The recorded runs used 2.1.296.
-- For the treatment: [`uv`](https://docs.astral.sh/uv/) (`uv run query.py` fetches `duckdb`), or a
-  `python3` with the `duckdb` package installed.
+- For the treatment: [`uv`](https://docs.astral.sh/uv/) (`uv run query.py` fetches `duckdb` 1.5.6,
+  pinned since the run on the thirty unseen questions; the recorded runs asked for any `duckdb` from
+  1.0 on and did not record which one they got), or a `python3` with the `duckdb` package installed.
 - For recording: `python3` 3.9 or newer, standard library only.
 
 From the repository root:
@@ -94,10 +96,17 @@ Things to know before you compare:
   `05_rerun`) so that it writes beside the committed rounds. The control has no rounds: its
   transcripts land beside the committed ones and [`control/control.md`](control/control.md) is written again from the new
   sessions alone — `git diff` shows the old against the new.
-- The current folder is round 4's plus the code meanings added after it, which move none of the
-  five answers ([results.md](results.md), What changed). To re-run a round exactly, check out the
-  commit it names (`679d0fb`, `b35316d`, `aa8e82a` or `d85d39b`) in a separate worktree and use
+- The current folder is round 4's plus the code meanings and decisions added after it and the
+  fixes made after the unseen run, which move none of the five answers ([results.md](results.md),
+  What changed). To re-run a round exactly, check out the commit it names (`679d0fb`, `b35316d`,
+  `aa8e82a` or `d85d39b`; `236cc9f` for the thirty unseen questions) in a separate worktree and use
   the kit from there.
+- Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),
+  B6 ("this year so far"), C6 and C9 ("this year"). Their expected answers in
+  [`questions-unseen.md`](questions-unseen.md) hold for 13 October 2026, the day both arms ran;
+  asked on another day, a right answer is another number. A3 ("right now"), B7 ("still open") and
+  B8 ("still outstanding") read the status the export holds, and the export does not change, so
+  they do not move.
 - The control's sessions explored the files with whatever was installed: pandas and pyarrow on the
   recording machine, plus the DuckDB CLI 1.5.6 and a system Python holding `duckdb` 0.9.2. The
   treatment needs only [`query.py`](query.py) from round 3 on.
@@ -114,6 +123,10 @@ query directly from this repository:
 
     uv run query.py --tables
     uv run query.py "SELECT count(*) FROM ZIW28_KG WHERE priority = 1"
+
+To check that every number the folder states still holds against the data — the worked examples,
+the counts of [reference/](reference/CONTEXT.md), and the SQL rules written the same way
+everywhere — run `uv run check/check.py` from this repository ([check/](check/CONTEXT.md)).
 
 ## Limits
 
