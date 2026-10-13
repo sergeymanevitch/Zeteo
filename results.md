@@ -15,12 +15,13 @@ Most of what made no folder good was spent before the control ran: on cleaning t
 got.
 
 **On thirty questions its author did not write, the folder got 80 of 90 answers right and no folder
-49** (§ Thirty questions the author did not write) — 82 against 49 by the key as it stood when the
-arms ran; the owner changed A3's key after the runs. On the eleven questions that need no reading
+49** (§ Thirty questions the author did not write) — 82 against 49 as first graded, before the owner
+changed A3's expected answer after the runs. On the eleven questions that need no reading
 of the data's meaning, every model in both arms was right. The lead is the owner's meanings — which
 date a month means, when a notification is completed, which status is current — and one honest
-habit: asked for what the data does not hold, no folder made a number up in five answers of six,
-the folder in one.
+habit: asked the two questions written to be unanswerable (B9, B10), no folder made a number up in
+five answers of six, the folder in one. On A3, which the owner's reading after the runs made
+unanswerable, every answer of both arms gave a number.
 
 ## The setup
 
@@ -245,7 +246,8 @@ folder had read it as discipline `E` on plant 65 and lost it. A second, A3, was 
 after both arms had run: what is being executed right now cannot be answered from these tables — it
 needs the order operations of SAP transaction IW37N — and `EXE` as the first user-status code means
 cleared for execution, not being executed. The key had read 5 (`EXE` the current user status). Both
-grades are given below: by the key as it stands, and by the key as it stood when the arms ran.
+grades are given below: by the key as it stands, and as first graded, before A3's change (A9
+already at 171).
 
 Graded by the build agent from the final replies: **✓** the main answer is the key's; **≈** the main
 answer is the other reading the key gives beside it (almost always another date); **✗** neither.
@@ -254,14 +256,14 @@ answer is the other reading the key gives beside it (almost always another date)
 | --- | --- | --- | --- | --- | --- |
 | no folder | 15 ✓ · 8 ≈ · 7 ✗ | 16 · 10 · 4 | 18 · 8 · 4 | **49 / 90** | 75 / 90 |
 | folder | 26 · 1 · 3 | 26 · 2 · 2 | 28 · 1 · 1 | **80 / 90** | 84 / 90 |
-| no folder, A3 by the key as it stood at the run | 15 · 9 · 6 | 16 · 11 · 3 | 18 · 8 · 4 | 49 / 90 | 77 / 90 |
-| folder, A3 by the key as it stood at the run | 27 · 1 · 2 | 27 · 2 · 1 | 28 · 1 · 1 | 82 / 90 | 86 / 90 |
+| no folder, A3 as first graded | 15 · 9 · 6 | 16 · 11 · 3 | 18 · 8 · 4 | 49 / 90 | 77 / 90 |
+| folder, A3 as first graded | 27 · 1 · 2 | 27 · 2 · 1 | 28 · 1 · 1 | 82 / 90 | 86 / 90 |
 
 | # | Tests | No folder H · S · O | Folder H · S · O | What decided it |
 | --- | --- | --- | --- | --- |
 | A1 | released date | ✓✓✓ | ✓✓✓ | |
 | A2 | department plant `64E` | ✓✓✓ | ≈✓✓ | folder Haiku took the default date though the question says "raise" |
-| A3 | being executed now — cannot be answered | ✗✗✗ (was ≈≈✗) | ✗✗✗ (was ✓✓✗) | the owner's reading after the runs: it needs IW37N. Every answer gave a number: no folder `EXE` anywhere (130; Opus 20, in process too), folder Haiku and Sonnet `EXE` first (5, the key as it stood), folder Opus `NOPR` (251) |
+| A3 | being executed now — cannot be answered | ✗✗✗ (was ≈≈✗) | ✗✗✗ (was ✓✓✗) | the owner's reading after the runs: it needs IW37N. Every answer gave a number: no folder `EXE` anywhere (130; Opus 20, in process too), folder Haiku and Sonnet `EXE` first (5, the key as first written), folder Opus `NOPR` (251) |
 | A4 | rows or distinct points | ≈≈✓ | ✓✓✓ | no folder Haiku and Sonnet counted only points with a measured value (8) |
 | A5 | a completed order | ✓≈✓ | ✓✓✓ | `CMPL` without `NCMP` counts |
 | A6 | out of limits | ✓✓≈ | ✓✓✓ | no folder Opus dropped duplicates and swapped limits (132) |
@@ -308,8 +310,8 @@ What the thirty show:
   B3, B5, B7, C2, C5, C7, C9, C10); all 66 answers to them are right in both arms.
 - **The lead is the owner's meanings.** 21 of no folder's 26 ≈ are the default date alone: it
   read every period by the day a notification was opened, the owner reads it by the day the work
-  is required. Counting ≈ as right, the gap narrows to 84 against 75 (86 against 77 by the key as
-  it stood at the run).
+  is required. Counting ≈ as right, the gap narrows to 84 against 75 (86 against 77 as first
+  graded).
 - **The folder says "cannot" where the data cannot.** On B9 and B10 no folder produced a number in
   five answers of six — an on-time percentage on a date that is only the scheduled one copied, and
   a labour cost reverse-engineered from hourly rates. The folder did so once. On A3, which only
@@ -409,11 +411,12 @@ electrical locations, "being executed" as the SAP in-process status — the two 
     being executed; the code table read "executed", and the worked reading of `PLND,EXE,COMP` said
     "was executed" ([reference/codes.md](reference/codes.md)).
   - What is being executed right now cannot be answered from the four tables: it needs the order
-    operations of SAP transaction IW37N, which are not added at this stage
+    operations of SAP transaction IW37N, which are not in this data
     ([rules.md § When the data cannot answer](rules.md#when-the-data-cannot-answer)).
 
-  Effect on the recorded answers: none of the five reads "electrical", a disagreement between
-  statuses, or `EXE`. Of the thirty, A3's key changes to "cannot be answered", in its own commit,
+  Effect on the recorded answers: none of the five reads "electrical" or `EXE`, and the one that
+  reads a status, Q5, asks for the user status by name (its notification's system status is
+  `NOCO`), so which status wins does not move it. Of the thirty, A3's key changes to "cannot be answered", in its own commit,
   as A9's key was set after the runs; every A3 answer of both arms gave a number and is regraded ✗
   (§ Thirty questions the author did not write). The folder now states the reading A9's key holds;
   its A9 answers, which read the discipline letter, stay as recorded. No other key moves.
@@ -434,8 +437,8 @@ electrical locations, "being executed" as the SAP in-process status — the two 
 - **A folder does not remove variance.** Rounds 1–3 gave the same number on all three models on
   every question; round 4's Haiku then broke a rule that had not changed (Q2).
 - **The folder buys speed and pays for it.** A third faster, a sixth to a fifth dearer.
-- **On questions its author did not write, the lead holds:** 80 of 90 against 49 (82 by the key as
-  it stood at the run), and every point
+- **On questions its author did not write, the lead holds:** 80 of 90 against 49 (82 as first
+  graded), and every point
   of it is a meaning the owner gave or an honest "cannot". On plain questions the arms tie.
 
 ## Known flaws in this comparison

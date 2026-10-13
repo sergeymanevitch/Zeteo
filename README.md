@@ -11,9 +11,10 @@ folder 12, then 14 in its last round — every point from a domain meaning the q
 supplied, one of them written after the runs. The folder is a third faster and a sixth dearer, and
 most of what made no folder good was spent before the control ran, on cleaning the data both arms
 got. On thirty questions the author did not write, the folder got 80 of 90 answers right and no
-folder 49 (82 against 49 by the key as it stood when the arms ran; the owner changed one answer
-after): the arms tie on plain questions, and the lead is the owner's meanings and an honest
-"cannot" where the data holds no answer. The whole account, losses and ties included:
+folder 49 (82 against 49 as first graded, before the owner changed A3's expected answer after the
+runs): the arms tie on plain questions, and the lead is the owner's meanings and an honest
+"cannot" on the two questions written to be unanswerable — though on A3, which the owner's later
+reading made unanswerable, every answer of both arms gave a number. The whole account, losses and ties included:
 [results.md](results.md).
 
 ## What is here
@@ -101,9 +102,9 @@ Things to know before you compare:
   transcripts land beside the committed ones and [`control/control.md`](control/control.md) is written again from the new
   sessions alone — `git diff` shows the old against the new.
 - The current folder is round 4's plus the code meanings and decisions added after it and the
-  fixes made after the unseen run, which move none of the five answers; of the thirty, only B4
-  could move, its count and not its median, under one reading ([results.md](results.md), What
-  changed). To re-run a round exactly, check out the commit it names (`679d0fb`, `b35316d`,
+  fixes and readings made after the unseen run, which move none of the five answers; of the thirty,
+  B4 could move its count and not its median under one reading, and the folder now states the
+  readings A3's and A9's expected answers hold ([results.md](results.md), What changed). To re-run a round exactly, check out the commit it names (`679d0fb`, `b35316d`,
   `aa8e82a` or `d85d39b`; `236cc9f` for the thirty unseen questions) in a separate worktree and use
   the kit from there.
 - Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),

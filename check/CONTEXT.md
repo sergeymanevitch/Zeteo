@@ -118,5 +118,6 @@ Stated numbers the check does not recompute, and why:
   files; only the `closed_on` and B4 numbers of `results.md` § What changed are data, and they are
   checked. The rules of [../rules.md](../rules.md) ("rounded to 2 decimals") are rules.
 - **The expected answers** of [../questions.md](../questions.md) and
-  [../questions-unseen.md](../questions-unseen.md): they are the committed record and are never
-  edited; where they disagree with the data, `results.md` says so.
+  [../questions-unseen.md](../questions-unseen.md): they are the committed record, edited only
+  where the owner settled an answer after the runs (A9, A3), each in its own commit; where they
+  disagree with the data, `results.md` says so.
