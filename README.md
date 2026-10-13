@@ -30,6 +30,16 @@ ties included: [results.md](results.md).
 The folder is the five files `CLAUDE.md`, `identity.md`, `rules.md`, `examples.md` and
 `reference/`, plus `query.py`. This README is for people and is copied into no run.
 
+## The data
+
+Four SAP exports from one company's plant maintenance: 435,958 notifications, 70,241 orders,
+729,886 measuring-point readings and 547,801 material bookings ([data/](data/CONTEXT.md)). They are
+a slice prepared for this competition, kept to the minimum, but they hold the main, high-volume
+part of the work — the tables a maintenance planner queries every day — so the folder is built and
+tested on data at real volume, not on a sample. Some questions a planner asks need data that is not
+here: whether a notification's work was done on time, for one, needs a completion date no export
+carries. The folder says so instead of answering.
+
 ## How the experiment ran
 
 The control gets the four Parquet files alone. The treatment gets the same files plus the folder.
