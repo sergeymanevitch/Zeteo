@@ -47,8 +47,8 @@ A location's plant and a notification's plant can differ: the location says wher
 stands, `plant` which plant is in charge of it (Sergey, 2026-10-13). In `ZIW28_KG`, `plant` is `88`
 on 4,406 notifications at locations of plant 80 and 968 of plant 81, and `70` on 1,451 at locations
 of plant 43. `88`, `80`, `81` and `8100` are one plant divided into sub-plants (Sergey,
-2026-10-13). A question naming one of them means that code as stored, as for any plant; when the
-others would add rows, give their number on the line for the other reading.
+2026-10-13); for now they are treated separately (Sergey, 2026-10-13): a question naming one of
+them means that code alone, as for any plant.
 
 `plant` is empty on 3,887 notifications; `010`, `06`, `1`, `4`, `5`, `20`, `69` and `71` are plants
 too (Sergey). `ZW38_KG` has plants `13`, `32`, `43`, `56`, `64`, `65`, `88` and `8100`; its
@@ -86,9 +86,11 @@ required, to plan the work (Sergey, 2026-10-13).
 
 `required_start_date` runs from 2008-05-01 to 2028-12-21; 3 rows before 2000 are not real dates.
 `created_on` runs from 2019-01-01 to 2026-10-10. `reference_date` is the day the work was reported
-performed (Sergey, 2026-10-13). It is filled on every row: on a notification not yet completed it
-holds no such day, and on most of them it equals `created_on` (26,419 of the 36,722 whose system
-status begins `NOPR`); read it on notifications whose system status begins `NOCO` (completed). One row reads
+performed (Sergey, 2026-10-13). It is filled on every row and set again when the notification is
+closed: before that it holds another day, most often `created_on` (26,419 of the 36,722 whose
+system status begins `NOPR`), so read it on notifications whose system status begins `NOCO`
+(completed). On a closed notification it can still equal `created_on`: the work was done the day
+it was reported, or the order was opened only after the work, recorded and closed at once. One row reads
 9202-12-15. The plant has not said what "on time" is measured against, so whether work was done on
 time is not answered from this data; say so, and give the dates the question needs.
 

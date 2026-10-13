@@ -31,7 +31,7 @@ How urgently the work must be done. Empty on 66,183 notifications and 33,187 ord
 | `RPM2` | preventive maintenance | 37,902 |
 | `RPM3` | safety-related work | 2 |
 | `RPM7` | root cause analysis (RCA) | 33 |
-| `1126` | unknown | 10 |
+| `1126` | the project department (Sergey, 2026-10-13) | 10 |
 
 ## Notification type (`ZIW28_KG.notification_type`) — plant
 
@@ -71,7 +71,11 @@ per minute (1,733). Empty on 74 readings.
 ## User status (`ZIW28_KG.notification_user_status`, `ZW38_KG.user_status`)
 
 A field may hold several codes: commas separate them on notifications (`PLND,EXE,COMP`), one or two
-spaces on orders (`PLAN EXE  COMP`). Match a code with `regexp_matches(field, '\bEXE\b')`.
+spaces on orders (`PLAN EXE  COMP`). As in every status field, the first code from the left is the
+current status and the rest are history (below, under the system status): `PLND,EXE,COMP` is
+planned now, and was executed and completed on the way. The first code is `PLAN` on 369,198
+notifications and 65,890 orders, most of them completed by their system status; say so when it
+shapes an answer. Match a code anywhere with `regexp_matches(field, '\bEXE\b')`.
 
 | Code | Meaning | Source |
 | --- | --- | --- |
@@ -98,8 +102,8 @@ Codes separated by spaces; on `ZIW28_KG.order_system_status`, by commas. `order_
 notifications is the status of the order attached to the notification; it is empty on the 32,639
 notifications that have no order.
 
-**The first code from the left is the current status; the codes after it are history** (Sergey,
-2026-10-13). `TECO PRT GMPS MACM PRC SETC` is an order that is technically completed now. A
+**In every status field, system or user, the first code from the left is the current status; the
+codes after it are history** (Sergey, 2026-10-13). `TECO PRT GMPS MACM PRC SETC` is an order that is technically completed now. A
 question about the status something is in ("orders released", "notifications in process") reads
 the first code:
 

@@ -24,4 +24,4 @@ notifications as such and the two counts differ.
 | `main_work_center` | VARCHAR | the work center responsible: 225 values, plain numbers (`3211`) or names (`64MAINT`, `43PUMP`); empty on 6 rows |
 | `required_start_date` | DATE | the day the work is required to start, used to plan it; the default for "notifications in a month" ([keys.md](keys.md#dates)); 3 rows before 2000 are not real dates |
 | `plant` | VARCHAR | the plant in charge, which may differ from the location's ([keys.md](keys.md#plant)); a department letter (`65E`, `65I`) marks a synthetic plant that is left out of plant 65; empty on 3,887 rows — use the plant rule of [keys.md](keys.md#plant) |
-| `reference_date` | DATE | the day the work was reported performed; filled on every row, so on a notification not yet completed it is no such day ([keys.md](keys.md#dates)); one row reads 9202-12-15 |
+| `reference_date` | DATE | the day the work was reported performed; set again when the notification is closed, so on one not yet completed it is no such day ([keys.md](keys.md#dates)); one row reads 9202-12-15 |
