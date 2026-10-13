@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.9"
+# requires-python = ">=3.10"
 # dependencies = ["duckdb==1.5.6"]
 # ///
 """Negative tests of check.py: a copy of the documents, changed in one place, must fail.
@@ -15,15 +15,19 @@ import sys
 
 sys.dont_write_bytecode = True
 
+import contextlib  # noqa: E402
 import importlib.util  # noqa: E402
+import io  # noqa: E402
 import pathlib  # noqa: E402
 import shutil  # noqa: E402
 import tempfile  # noqa: E402
 import unittest  # noqa: E402
+from unittest import mock  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
 REPO = HERE.parent
-DOCUMENTS = ("CLAUDE.md", "identity.md", "rules.md", "examples.md", "README.md", "reference", "data/CONTEXT.md")
+DOCUMENTS = ("CLAUDE.md", "identity.md", "rules.md", "examples.md", "README.md", "results.md", "reference",
+             "data/CONTEXT.md")
 
 
 def load_check():
@@ -94,6 +98,90 @@ class CheckTest(unittest.TestCase):
         self.change("reference/keys.md", "try_cast(plant AS INTEGER) = 65", "try_cast(plant AS BIGINT) = 65")
         failures = self.assertFails("reference/keys.md", "the plant as a number is written differently")
         self.assertEqual(len(failures), 1, failures)
+
+    def test_plant_rule_widened_in_keys(self):
+        self.change("reference/keys.md", "try_cast(plant AS INTEGER) = 65 ",
+                    "try_cast(plant AS INTEGER) = 65 OR plant = '65E' ")
+        failures = self.assertFails("reference/keys.md", "the plant as a number is written differently")
+        self.assertEqual(len(failures), 1, failures)
+
+    def test_plant_rule_deleted_from_keys(self):
+        path = self.root / "reference/keys.md"
+        lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+        kept = [line for line in lines if "try_cast(plant AS INTEGER) = 65" not in line]
+        self.assertEqual(len(kept), len(lines) - 1)
+        path.write_text("".join(kept), encoding="utf-8")
+        self.assertFails("reference/keys.md", "the plant as a number found 0 times")
+
+    def test_digit_in_front_of_a_stated_count(self):
+        self.change("reference/ik17.md", "30,964 points", "130,964 points")
+        failures = self.assertFails("reference/ik17.md", "phrase not found", "30,964 points")
+        self.assertEqual(len(failures), 1, failures)
+
+    def test_example_not_registered(self):
+        path = self.root / "examples.md"
+        path.write_text(path.read_text(encoding="utf-8")
+                        + "\n## 11. One more\n\n```sql\nSELECT 1;\n```\n\n**A:** 1.\n", encoding="utf-8")
+        self.assertFails("example 11 is not in check.py's EXAMPLES")
+
+    def test_example_number_twice(self):
+        self.change("examples.md", "## 8. Notifications in a month", "## 7. Notifications in a month")
+        self.assertFails("example 7 appears twice")
+
+    def test_example_sql_that_writes_is_not_run(self):
+        self.change("examples.md", "SELECT count(*) AS orders\nFROM ZW38_KG\nWHERE main_work_center = '6415'",
+                    "CREATE TABLE ZW38_COPY AS SELECT count(*) AS orders\nFROM ZW38_KG\n"
+                    "WHERE main_work_center = '6415'")
+        self.assertFails("example 7", "not one statement that reads")
+        tables = [t for (t,) in self.con.execute("SELECT table_name FROM information_schema.tables").fetchall()]
+        self.assertNotIn("ZW38_COPY", tables)
+
+    def test_recorded_rows_differ_from_the_sql(self):
+        digest = check.EXAMPLES[7][0]
+        with mock.patch.dict(check.EXAMPLES, {7: (digest, [("444",)], [])}):
+            failures = self.failures()
+        self.assertEqual(len(failures), 1, failures)
+        self.assertIn("example 7: its SQL returns", failures[0])
+
+    def test_written_in_reads_a_whole_number(self):
+        self.assertTrue(check.written_in("4,202", "114 of 4,202 readings"))
+        self.assertFalse(check.written_in("4,202", "114 of 14,202 readings"))
+        self.assertFalse(check.written_in("4,202", "114 of 4,202.5 readings"))
+
+    def test_exit_codes(self):
+        out = io.StringIO()
+        with mock.patch.object(check, "connect", return_value=self.con), contextlib.redirect_stdout(out):
+            self.assertEqual(check.main(["--root", str(self.root)]), 0)
+            self.change("examples.md", "**A:** 443.", "**A:** 442.")
+            self.assertEqual(check.main(["--root", str(self.root)]), 1)
+
+    def facts(self, *facts):
+        return check.check_facts(self.root, self.con, list(facts))[0]
+
+    def test_wrong_decimal(self):
+        failures = self.facts(("examples.md", "125 completed ({79.62} %)", "SELECT 79.63"))
+        self.assertEqual(failures, ["examples.md: '125 completed (79.62 %)': stated 79.62; measured 79.63"])
+
+    def test_wrong_date(self):
+        failures = self.facts(("reference/keys.md", "One row reads {9202-12-15}", "SELECT DATE '9202-12-16'"))
+        self.assertEqual(len(failures), 1, failures)
+        self.assertIn("stated 9202-12-15; measured 9202-12-16", failures[0])
+
+    def test_null_result(self):
+        failures = self.facts(("reference/codes.md", "| 1 | immediately | {70,430} |", "SELECT NULL"))
+        self.assertEqual(len(failures), 1, failures)
+        self.assertIn("stated 70,430; measured None", failures[0])
+
+    def test_statement_that_does_not_hold(self):
+        failures = self.facts(("reference/ik17.md", "a point belongs to one location", "SELECT false"))
+        self.assertEqual(len(failures), 1, failures)
+        self.assertIn("does not hold", failures[0])
+
+    def test_two_rows_for_one_phrase(self):
+        failures = self.facts(("reference/codes.md", "| 1 | immediately | {70,430} |",
+                               "SELECT 70430 UNION ALL SELECT 70430"))
+        self.assertEqual(len(failures), 1, failures)
+        self.assertIn("expected one row", failures[0])
 
     def test_fact_wrong_against_the_data(self):
         facts = [("reference/codes.md", "| 1 | immediately | {70,430} |", "SELECT 70431")]

@@ -372,17 +372,19 @@ electrical locations, "being executed" as the SAP in-process status — the two 
     [rules.md](rules.md) asks for the other reading's number too; it now says one query for each
     reading.
   - [query.py](query.py) pins `duckdb` 1.5.6 instead of any version from 1.0. The recorded runs did
-    not record which version `uv` fetched.
+    not record which version `uv` fetched. `duckdb` 1.5.6 needs Python 3.10 or newer, so the script
+    now asks for it; `uv` fetches a managed Python when the system one is older.
   - [reference/codes.md](reference/codes.md) said a stray `*` stands in `ZW38_KG.system_status` on
     15 orders; it is on 16, on one of them glued to `NTUP`. Found by [check/](check/CONTEXT.md),
-    added with these fixes outside the folder, which recomputes every number the folder states about
-    the data and fails when a document and the data disagree.
+    added with these fixes outside the folder, which recomputes the numbers its registry lists — the
+    stated counts of the reference files, the examples, and the `closed_on` paragraph above — and
+    fails when a document and the data disagree.
 
   Effect on the recorded answers: none of the five reads `closed_on` or a stray `*`. Of the thirty,
   B4 would move its count and not its median, as above, under the reading that counts orders closed
-  without the work done; the folder's B9 answers cite `closed_on` as a closing day on `TECO` orders
-  only, which does not change their verdict, that the question cannot be answered. Nothing else
-  reads what changed.
+  without the work done; two of the folder's three B9 answers (Sonnet, Opus) cite `closed_on` as a
+  closing day on `TECO` orders only, which does not change their verdict, that the question cannot
+  be answered. Nothing else reads what changed.
 
 ## What this says, and what it does not
 
@@ -426,9 +428,10 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   from his terminal.
 - Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),
   B6 ("this year so far"), C6 and C9 ("this year"). Their expected answers hold for 13 October 2026,
-  the day both arms ran; a re-run on another day has other right numbers, and the key does not say
-  so. A3 ("right now"), B7 ("still open") and B8 ("still outstanding") read the status the export
-  holds, which does not change, so they do not move.
+  the day both arms ran, as [questions-unseen.md](questions-unseen.md) says, and only for that day:
+  a re-run on another day has other right numbers. A3 ("right now"), B7 ("still open") and B8
+  ("still outstanding") read the status the export holds, which does not change, so they do not
+  move.
 - The five questions were written by the data's owner. The thirty unseen ones were written by a
   separate session, but their expected answers were computed by the folder's author with the
   folder's definitions, A9's was settled after the runs, and the grading (✓, ≈, ✗) is the build

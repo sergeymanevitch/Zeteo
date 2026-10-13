@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.9"
+# requires-python = ">=3.10"
 # dependencies = ["duckdb==1.5.6"]
 # ///
 """Hold Zeteo's documents to its data.
@@ -7,14 +7,17 @@
     uv run check/check.py              # from the repository root
     uv run check/check.py --root DIR   # read the documents from DIR; the data stays this repo's
 
-Three checks, each against the four Parquet files loaded by query.py's own connect():
+Three checks. (a) and (b) query the four Parquet files loaded by query.py's own connect();
+(c) reads the documents alone:
 
 (a) EXAMPLES  every worked example of examples.md: its SQL is the SQL recorded here (a sha256
               prefix), it still returns the recorded rows, and the numbers its **A:** paragraph
               writes are those rows.
-(b) FACTS     every stated count of reference/*.md, data/CONTEXT.md, README.md § The data, and the
-              numbers of an **A:** paragraph its own SQL does not return: the sentence is in the
-              file, and a query returns what it says.
+(b) FACTS     the stated counts of reference/*.md, data/CONTEXT.md, README.md § The data, the
+              numbers of an **A:** paragraph its own SQL does not return, and the closed_on
+              paragraph of results.md § What changed: the sentence is in the file, and a query
+              returns what it says. Only what the registry lists is checked; a new number needs a
+              new row.
 (c) RULES     every SQL rule the documents repeat is written the same way everywhere.
 
 One line per failure and exit 1; otherwise one summary line and exit 0. A query that fails is a
@@ -226,9 +229,8 @@ FACTS = [
     ("reference/codes.md", "`ZW38_KG.system_status` also holds a stray `*` on {16} orders",
      _count("ZW38_KG", "contains(system_status, '*')")),
     ("reference/codes.md", "on one of them glued to the code before it (`NTUP*`)",
-     "SELECT count(*) FILTER (WHERE NOT regexp_matches(system_status, '(^|\\s)\\*(\\s|$)')) = 1 "
-     "AND count(*) FILTER (WHERE contains(system_status, 'NTUP*')) = 1 "
-     "FROM ZW38_KG WHERE contains(system_status, '*')"),
+     "SELECT count(*) = 1 AND bool_and(contains(system_status, 'NTUP*')) FROM ZW38_KG "
+     "WHERE contains(system_status, '*') AND NOT regexp_matches(system_status, '(^|\\s)\\*(\\s|$)')"),
 
     # reference/ik17.md
     ("reference/ik17.md", "File `data/IK17_KG.parquet`, {729,886} rows.", "SELECT count(*) FROM IK17_KG"),
@@ -332,12 +334,41 @@ FACTS = [
      "WHERE plant = '43' AND created_on >= DATE '2026-05-01' AND created_on < DATE '2026-06-01'"),
 ]
 
+# results.md § What changed: the closed_on paragraph and what it means for B4
+B4 = "plant = '32' AND closed_on >= DATE '2026-04-01' AND closed_on < DATE '2026-07-01'"
+MEDIAN = "median(date_diff('day', created_on, closed_on))"
+FACTS += [
+    ("results.md", "a value running into the future on the {7,748} others", _count("ZW38_KG", f"NOT {TECO}")),
+    ("results.md", "closed order — `TECO` {62,493}, `CMPL` with `NCMP` {5,024}, `CMPL` alone {142}",
+     _counts(("ZW38_KG", TECO), ("ZW38_KG", f"{CMPL} AND {NCMP}"), ("ZW38_KG", f"{CMPL} AND NOT {NCMP}"))),
+    ("results.md", "`CMPL` alone 142, none later than 2026-10-13",
+     f"SELECT count(*) = 0 FROM ZW38_KG WHERE ({TECO} OR {CMPL}) AND closed_on > DATE '2026-10-13'"),
+    ("results.md", "no closing day on the {2,582} orders that are neither (first code `CRTD` {1,912}, "
+                   "`REL` {669}, `LKD` {1}), {320} of them later than 2026-10-13, up to {2027-11-18}",
+     f"SELECT count(*), count(*) FILTER (WHERE {FIRST.format('system_status')} = 'CRTD'), "
+     f"count(*) FILTER (WHERE {FIRST.format('system_status')} = 'REL'), "
+     f"count(*) FILTER (WHERE {FIRST.format('system_status')} = 'LKD'), "
+     "count(*) FILTER (WHERE closed_on > DATE '2026-10-13'), max(closed_on) "
+     f"FROM ZW38_KG WHERE NOT {TECO} AND NOT {CMPL}"),
+    ("results.md", "{357} orders with `TECO`, median {49} days",
+     f"SELECT count(*), {MEDIAN} FROM ZW38_KG WHERE {B4} AND {TECO}"),
+    ("results.md", "none with `CMPL` alone;",
+     f"SELECT count(*) = 0 FROM ZW38_KG WHERE {B4} AND {CMPL} AND NOT {NCMP}"),
+    ("results.md", "{2} with `CMPL` and `NCMP`, which make {359} with the same median, {49}",
+     f"SELECT count(*) FILTER (WHERE {CMPL} AND {NCMP}), count(*), {MEDIAN} FROM ZW38_KG "
+     f"WHERE {B4} AND ({TECO} OR {CMPL})"),
+    ("results.md", "the {24} orders that are neither and carry a Q2 `closed_on`",
+     _count("ZW38_KG", f"{B4} AND NOT {TECO} AND NOT {CMPL}")),
+    ("results.md", "moves the count to {359} and not the median",
+     f"SELECT count(*) FROM ZW38_KG WHERE {B4} AND ({TECO} OR {CMPL})"),
+]
+
 # --- (c) the repeated SQL rules ----------------------------------------------------------------
 # (name, loose anchor, canonical text, {file: occurrences it must hold at least}).
-# In the canonical text {N} is a plant number and {FIELD} a column name; the rest must stand
-# exactly, once whitespace is collapsed.
+# In the canonical text {N} is a plant number, {FIELD} a column name and {CODE} a status code; the
+# rest must stand exactly, once whitespace is collapsed, and be followed by the end of a clause.
 RULES = [
-    ("the plant as a number", r"try_cast\s*\(", "try_cast(plant AS INTEGER) = {N}",
+    ("the plant as a number", r"(?:try_)?cast\s*\(\s*plant\b|\bplant\s*::", "try_cast(plant AS INTEGER) = {N}",
      {"reference/keys.md": 1, "examples.md": 3}),
     ("the plant of a location", r"split_part\s*\(", "split_part(functional_location, '-', 2) = '{N}'",
      {"reference/keys.md": 1, "examples.md": 1}),
@@ -345,17 +376,23 @@ RULES = [
      r"regexp_matches(system_status, '\bTECO\b') OR (regexp_matches(system_status, '\bCMPL\b') "
      r"AND NOT regexp_matches(system_status, '\bNCMP\b'))",
      {"reference/codes.md": 1, "examples.md": 1}),
-    ("the first code", r"regexp_extract\s*\(", r"regexp_extract({FIELD}, '^\s*([^ ,]+)', 1)",
+    ("the first code", r"regexp_extract\s*\(", r"regexp_extract({FIELD}, '^\s*([^ ,]+)', 1) = '{CODE}'",
      {"reference/codes.md": 2}),
 ]
 
 
+_QUERY = []
+
+
 def load_query():
-    """query.py itself, loaded from this repository so that its connect() loads the data."""
-    spec = importlib.util.spec_from_file_location("zeteo_query", REPO / "query.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    """query.py itself, loaded once from this repository: its connect() loads the data, its
+    one_read() decides whether an example's SQL may run."""
+    if not _QUERY:
+        spec = importlib.util.spec_from_file_location("zeteo_query", REPO / "query.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _QUERY.append(module)
+    return _QUERY[0]
 
 
 def connect():
@@ -405,17 +442,30 @@ def written_in(form, paragraph):
     return re.search(pattern, paragraph) is not None
 
 
+def stands_in(phrase, text):
+    """Whether a phrase stands in a text on its own: no letter, digit or '.' just before it, and,
+    when it ends in a digit, no letter or digit just after it, as written_in() reads a number."""
+    pattern = r"(?<![0-9A-Za-z.])(?<![0-9],)" + re.escape(phrase)
+    if phrase[-1:].isdigit():
+        pattern += r"(?![0-9A-Za-z])(?![.,][0-9])"
+    return re.search(pattern, text) is not None
+
+
 # --- (a) ---------------------------------------------------------------------------------------
 
 def parse_examples(text):
-    """{number: (the SQL block, the **A:** paragraph whitespace-collapsed)}"""
+    """{number: (the SQL block, the **A:** paragraph whitespace-collapsed)}, and the numbers that
+    head more than one section."""
     found = {}
+    twice = []
     sections = re.split(r"^## (\d+)\. .*$", text, flags=re.M)
     for number, body in zip(sections[1::2], sections[2::2]):
         sql = re.search(r"^```sql\n(.*?)^```", body, flags=re.S | re.M)
         answer = re.search(r"^\*\*A:\*\*(.*?)(?:\n\s*\n|\Z)", body, flags=re.S | re.M)
+        if int(number) in found:
+            twice.append(int(number))
         found[int(number)] = (sql.group(1) if sql else None, collapse(answer.group(1)) if answer else None)
-    return found
+    return found, twice
 
 
 def check_examples(root, con):
@@ -423,7 +473,9 @@ def check_examples(root, con):
     text = read(root, "examples.md")
     if isinstance(text, Exception):
         return [f"examples.md: cannot be read: {text}"], 0
-    found = parse_examples(text)
+    found, twice = parse_examples(text)
+    for number in sorted(set(twice)):
+        failures.append(f"examples.md: example {number} appears twice")
     for number in sorted(set(found) - set(EXAMPLES)):
         failures.append(f"examples.md: example {number} is not in check.py's EXAMPLES")
     for number, (digest, rows, pairs) in EXAMPLES.items():
@@ -438,11 +490,15 @@ def check_examples(root, con):
         if hashlib.sha256(sql.encode("utf-8")).hexdigest()[:len(digest)] != digest:
             failures.append(f"{where}: the SQL of example {number} changed; update EXAMPLES in check.py "
                             "once its result is checked")
-        try:
-            measured = [tuple(str(cell) for cell in row) for row in run_sql(con, sql)]
-        except Exception as error:  # a query error is a failure, not a crash
-            failures.append(f"{where}: its SQL failed: {error}")
-            measured = None
+        statement = sql.strip().rstrip(";").strip()
+        measured = None
+        if not load_query().one_read(con, statement):
+            failures.append(f"{where}: its SQL is not one statement that reads, as query.py requires; not run")
+        else:
+            try:
+                measured = [tuple(str(cell) for cell in row) for row in run_sql(con, statement)]
+            except Exception as error:  # a query error is a failure, not a crash
+                failures.append(f"{where}: its SQL failed: {error}")
         if measured is not None and measured != rows:
             failures.append(f"{where}: its SQL returns {measured}, recorded {rows}")
         for row, column, form in pairs:
@@ -465,9 +521,11 @@ def check_facts(root, con, facts=None):
         text = texts[name]
         plain = collapse(phrase.replace("{", "").replace("}", ""))
         if isinstance(text, Exception):
-            failures.append(f"{name}: cannot be read: {text}")
+            line = f"{name}: cannot be read: {text}"
+            if line not in failures:
+                failures.append(line)
             continue
-        if plain not in text:
+        if not stands_in(plain, text):
             failures.append(f"{name}: phrase not found: {plain}")
             continue
         stated = re.findall(r"\{([^{}]*)\}", phrase)
@@ -491,10 +549,17 @@ def check_facts(root, con, facts=None):
 
 # --- (c) ---------------------------------------------------------------------------------------
 
+# What may follow a rule: the end of a line or of the text, AND, a closing parenthesis, a semicolon,
+# a SQL comment, or the backtick that closes inline code.
+CLAUSE_END = r"[ \t]*(?:$|AND\b|\)|;|--|`)"
+
+
 def rule_pattern(canonical):
-    parts = re.split(r"(\{N\}|\{FIELD\})", canonical)
-    pieces = {"{N}": r"\d+", "{FIELD}": r"\w+"}
-    return re.compile("".join(pieces.get(p, re.escape(p)) for p in parts))
+    """The canonical text with its variables, any run of white space where it has one space, and
+    the end of a clause after it."""
+    parts = re.split(r"(\{N\}|\{FIELD\}|\{CODE\}| )", canonical)
+    pieces = {"{N}": r"\d+", "{FIELD}": r"\w+", "{CODE}": r"[A-Z]+", " ": r"\s+"}
+    return re.compile("".join(pieces.get(p, re.escape(p)) for p in parts) + CLAUSE_END, re.M)
 
 
 def check_rules(root):
@@ -502,11 +567,14 @@ def check_rules(root):
     checked = 0
     names = []
     for pattern in RULE_FILES:
-        names += sorted(str(p.relative_to(root)) for p in root.glob(pattern) if p.is_file())
+        names += sorted(p.relative_to(root).as_posix() for p in root.glob(pattern) if p.is_file())
     texts = {}
     for name in names:
         text = read(root, name)
-        texts[name] = "" if isinstance(text, Exception) else collapse(text)
+        if isinstance(text, Exception):
+            failures.append(f"{name}: cannot be read: {text}")
+            text = ""
+        texts[name] = text
     for rule, anchor, canonical, required in RULES:
         exact = rule_pattern(canonical)
         width = len(canonical) + 15
@@ -516,7 +584,7 @@ def check_rules(root):
                 found += 1
                 checked += 1
                 if not exact.match(texts[name], match.start()):
-                    snippet = texts[name][match.start():match.start() + width]
+                    snippet = collapse(texts[name][match.start():match.start() + 3 * width])[:width]
                     failures.append(f"{name}: {rule} is written differently: '{snippet}' "
                                     f"(the rule is '{canonical}')")
             if found < required.get(name, 0):

@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.9"
+# requires-python = ">=3.10"
 # dependencies = ["duckdb==1.5.6"]
 # ///
 """Run one read-only SQL query over Zeteo's data and print the result.
