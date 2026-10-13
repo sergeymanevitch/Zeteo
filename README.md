@@ -5,10 +5,12 @@ measuring-point readings and material costs — and the evidence of what it does
 not. Every answer comes from one DuckDB query over the shipped Parquet files, and the answer shows
 the criteria and the SQL it ran.
 
-**What the evidence says, in one line:** by the answer key, the folder tied no folder (6 of 15
-against 6 of 15); by what the data says, it won one question of five, and most of its advantage was
-spent before the control ran — on cleaning the data both arms got. The whole account, losses and
-ties included: [results.md](results.md).
+**What the evidence says:** by the answer key, the folder tied no folder (6 of 15 against 6 of 15),
+because the key is itself wrong three times. By what the data says, no folder got 9 of 15 and the
+folder 12, then 14 in its last round — every point from a domain meaning the questions' author
+supplied, one of them written after the runs. The folder is a third faster and a sixth dearer, and
+most of what made no folder good was spent before the control ran, on cleaning the data both arms
+got. The whole account, losses and ties included: [results.md](results.md).
 
 ## What is here
 
@@ -23,7 +25,7 @@ ties included: [results.md](results.md).
 | [reference/](reference/CONTEXT.md) | the map of the data: tables, columns, codes, keys, which date |
 | [query.py](query.py) | one read-only door to the four tables, used by the folder from round 3 |
 | [control/](control/control.md) | the run without the folder, raw transcripts and a summary |
-| [treatment/](treatment/CONTEXT.md) | the runs with the folder — three rounds, raw transcripts and a summary each |
+| [treatment/](treatment/CONTEXT.md) | the runs with the folder — four rounds, raw transcripts and a summary each |
 | [run/](run/CONTEXT.md) | the kit that builds each arm, asks the questions and records the sessions |
 | [results.md](results.md) | what changed, question by question, and what changed in the folder because of it |
 
@@ -47,8 +49,8 @@ Each question of [`questions.md`](questions.md) is the whole prompt, asked as wr
 `claude -p` session, on Haiku, then Sonnet, then Opus. Claude Code's session transcripts are copied
 into the repository byte for byte, with a summary written from them by script.
 
-The control ran once; the treatment ran three times, because the folder changed twice after a
-treatment run. Each round's folder is named for the commit it ran on; [results.md](results.md)
+The control ran once; the treatment ran four times, because the folder changed three times after
+a treatment run. Each round's folder is named for the commit it ran on; [results.md](results.md)
 says what changed and why.
 
 ## Re-running both arms
@@ -72,7 +74,7 @@ From the repository root:
     run/ask.sh ~/zeteo-runs/treatment haiku
     run/ask.sh ~/zeteo-runs/treatment sonnet
     run/ask.sh ~/zeteo-runs/treatment opus
-    python3 run/collect.py treatment ~/zeteo-runs/treatment 04_rerun
+    python3 run/collect.py treatment ~/zeteo-runs/treatment 05_rerun
 
 Things to know before you compare:
 
@@ -84,17 +86,18 @@ Things to know before you compare:
 - `haiku`, `sonnet` and `opus` are aliases. The recorded runs resolved them to `claude-haiku-5-5`,
   `claude-sonnet-5-5` and `claude-opus-5-5`; pass a full model ID to `ask.sh` to pin one.
 - [`collect.py`](run/collect.py) copies the sessions into the clone. Give the treatment a new round name (above,
-  `04_rerun`) so that it writes beside the committed rounds. The control has no rounds: its
+  `05_rerun`) so that it writes beside the committed rounds. The control has no rounds: its
   transcripts land beside the committed ones and [`control/control.md`](control/control.md) is written again from the new
   sessions alone — `git diff` shows the old against the new.
-- The current folder is round 3's. To re-run round 1 or 2, check out the commit the round names
-  (`679d0fb` or `b35316d`) in a separate worktree and use the kit from there.
+- The current folder is round 4's. To re-run an earlier round, check out the commit the round names
+  (`679d0fb`, `b35316d` or `aa8e82a`) in a separate worktree and use the kit from there.
 - The control's sessions explored the files with whatever was installed: pandas and pyarrow on the
   recording machine, plus the DuckDB CLI 1.5.6 and a system Python holding `duckdb` 0.9.2. The
-  treatment's round 3 needs only [`query.py`](query.py).
+  treatment needs only [`query.py`](query.py) from round 3 on.
 
-The expected spread: Q1 and Q5 the same in both arms; Q2 170 with the folder and 71 (or 60
-distinct points) without; Q3 19.98 % in both; Q4 9119.14 in both. Three of the committed expected
+The expected spread, on the current folder (round 4): Q1 3 and Q5 `REJC` in both arms; Q2 170 with
+the folder and 71 (or 60 distinct points) without; Q3 22.19 % with the folder and 19.98 % without;
+Q4 9119.14 in both. Three of the committed expected
 answers are wrong, and [results.md](results.md) says how.
 
 ## Asking it your own question
