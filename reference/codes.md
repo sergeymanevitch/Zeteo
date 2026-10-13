@@ -73,15 +73,16 @@ per minute (1,733). Empty on 74 readings.
 A field may hold several codes: commas separate them on notifications (`PLND,EXE,COMP`), one or two
 spaces on orders (`PLAN EXE  COMP`). As in every status field, the first code from the left is the
 current status and the rest are history (below, under the system status): `PLND,EXE,COMP` is
-planned now, and was executed and completed on the way. The first code is `PLAN` on 369,198
+planned now, and was cleared for execution and completed on the way. The first code is `PLAN` on 369,198
 notifications and 65,890 orders, most of them completed by their system status; say so when it
-shapes an answer. Match a code anywhere with `regexp_matches(field, '\bEXE\b')`.
+shapes an answer. When the system status and the user status disagree about the current state, the
+system status wins (Sergey, 2026-10-13). Match a code anywhere with `regexp_matches(field, '\bEXE\b')`.
 
 | Code | Meaning | Source |
 | --- | --- | --- |
 | `PLAN` | awaiting planning | plant |
 | `PLND` | planned | plant |
-| `EXE` | executed | plant |
+| `EXE` | cleared for execution: the work may be executed, not that it is being executed (Sergey, 2026-10-13); what is being executed now is not in this data ([rules.md](../rules.md#when-the-data-cannot-answer)) | plant |
 | `COMP` | completed | plant |
 | `REJC` | rejected | plant |
 | `WFAP` | waiting for approval | plant |

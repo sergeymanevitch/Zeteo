@@ -36,7 +36,10 @@ whole plant, 589 of them `D-65`),
 On notifications a letter after the digits names a department, not a plant: `E` electrical, `I`
 instrumentation. `65E` and `65I` are synthetic plants that say which department is in charge of
 work done in plant 65. They are **not** counted as plant 65: a question about plant 65 means the
-rows whose `plant` is `65` and nothing else (Sergey, 2026-10-12). Plants are numbers: `010` is
+rows whose `plant` is `65` and nothing else (Sergey, 2026-10-12). "Electrical" for a plant means
+its department plant with the letter `E`: electrical notifications of plant 65 are
+`plant = '65E'` in `ZIW28_KG`. "Electrical" alone means the department plant, not the discipline
+letter `E` of a functional location (Sergey, 2026-10-13). Plants are numbers: `010` is
 plant 10 and `1` is plant 01, so compare them as integers. For plant 65:
 
     try_cast(plant AS INTEGER) = 65                                                              -- ZIW28_KG

@@ -385,6 +385,27 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   without the work done; two of the folder's three B9 answers (Sonnet, Opus) cite `closed_on` as a
   closing day on `TECO` orders only, which does not change their verdict, that the question cannot
   be answered. Nothing else reads what changed.
+- **After the unseen run, because of A3 and A9:** four decisions of Sergey's on 2026-10-13, given
+  after he read both arms' answers. No answer was re-run on them.
+  - "Electrical" for a plant is its department plant with the letter `E`: electrical notifications
+    of plant 65 are `plant = '65E'`; "electrical" alone is that, not the discipline letter `E` of a
+    location ([reference/keys.md § Plant](reference/keys.md#plant), with a pointer in
+    [rules.md](rules.md)). A9's key, 171, was already this reading.
+  - When the system status and the user status disagree about the current state, the system status
+    wins ([reference/codes.md](reference/codes.md), under the user status; pointer in
+    [rules.md](rules.md)).
+  - `EXE` as the first user-status code means the work is cleared for execution, not that it is
+    being executed; the code table read "executed", and the worked reading of `PLND,EXE,COMP` said
+    "was executed" ([reference/codes.md](reference/codes.md)).
+  - What is being executed right now cannot be answered from the four tables: it needs the order
+    operations of SAP transaction IW37N, which are not added at this stage
+    ([rules.md § When the data cannot answer](rules.md#when-the-data-cannot-answer)).
+
+  Effect on the recorded answers: none of the five reads "electrical", a disagreement between
+  statuses, or `EXE`. Of the thirty, A3's key changes to "cannot be answered", in its own commit,
+  as A9's key was set after the runs; every A3 answer of both arms gave a number and is regraded ✗
+  (§ Thirty questions the author did not write). The folder now states the reading A9's key holds;
+  its A9 answers, which read the discipline letter, stay as recorded. No other key moves.
 
 ## What this says, and what it does not
 

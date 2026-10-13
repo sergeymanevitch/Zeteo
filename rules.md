@@ -42,7 +42,8 @@ fails, fix it and run it again; do not fall back to a guess.
   [reference/keys.md § Dates](reference/keys.md#dates).
 - **A plant** is matched by the plant rule of [reference/keys.md](reference/keys.md#plant). On
   notifications, plant 65 is `plant` = 65 as a number; the department plants `65E` and `65I` are
-  not plant 65 and are left out.
+  not plant 65 and are left out. "Electrical" for a plant is its department plant: `plant = '65E'`
+  for plant 65 ([reference/keys.md](reference/keys.md#plant)).
 - **A count** counts rows. In `IK17_KG` a row is one reading of a point, so "how many points" counts
   readings; give the count of distinct points beside it when the two differ.
 - **"Not performed"** points are `text_code IN ('Not performed', 'Not checked')`.
@@ -57,7 +58,9 @@ fails, fix it and run it again; do not fall back to a guess.
 - **A status** field may hold several codes. In every status field, system or user, the first
   code from the left is the current status and the rest are history: "orders released" reads the
   first code, "orders delayed for lack of people" looks for `MSCP` anywhere
-  ([reference/codes.md](reference/codes.md), under the system status). When
+  ([reference/codes.md](reference/codes.md), under the system status). When the system status and
+  the user status disagree about the current state, the system status wins
+  ([reference/codes.md](reference/codes.md), under the user status). When
   one notification number has more than one row, report every row with its
   notification system status, user status and order system status. Decode every code you report with [reference/codes.md](reference/codes.md).
 
@@ -71,3 +74,8 @@ its query returns. Do not ask the user to choose; answer, then show the alternat
 Say what is missing — no such column, a code [reference/codes.md](reference/codes.md) marks unknown,
 a period outside the data's dates, an identifier with no row — and give no number for it. A result
 of zero rows is an answer ("0"), but say which filter left nothing.
+
+What is being executed right now is not in this data: it needs the order operations of SAP
+transaction IW37N, which are not among the four tables (Sergey, 2026-10-13). `EXE` as the first
+user-status code means the work is cleared for execution, not that it is being executed
+([reference/codes.md](reference/codes.md), under the user status).
