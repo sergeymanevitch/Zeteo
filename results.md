@@ -274,7 +274,7 @@ answer is the other reading the key gives beside it (almost always another date)
 | B1 | completed notification | ≈≈≈ | ✓✓✓ | default date |
 | B2 | is one notification finished | ✗✗✓ | ✓✓✓ | no folder Haiku and Sonnet looked for a Claude Code notification, not the data's |
 | B3 | duration, average | ✓✓✓ | ✓✓✓ | |
-| B4 | duration, median | ✓≈✓ | ✓✓✓ | `closed_on` only on `TECO` |
+| B4 | duration, median | ✓≈✓ | ✓✓✓ | a closed order is a completed order (`TECO`, or `CMPL` without `NCMP`); the folder said `closed_on` only on `TECO`, corrected after the runs |
 | B5 | last month | ✓✓✓ | ✓✓✓ | |
 | B6 | this year against last | ≈≈≈ | ✓≈✓ | by opened date up, by required date down |
 | B7 | still open | ✓✓✓ | ✓✓✓ | |
@@ -370,17 +370,17 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   2026-10-13, approved by Sergey. No answer was re-run on them.
   - `closed_on` was stated wrongly in [reference/zw38.md](reference/zw38.md) and
     [reference/keys.md § Dates](reference/keys.md#dates): a closing day on `TECO` orders only, and
-    a value running into the future on the 7,748 others. Measured: it is the closing day on every
-    closed order — `TECO` 62,493, `CMPL` with `NCMP` 5,024, `CMPL` alone 142, none later than
+    a value running into the future on the 7,748 others. Measured: it holds a real day on three groups
+    of orders — `TECO` 62,493, `CMPL` with `NCMP` 5,024, `CMPL` alone 142, none later than
     2026-10-13 — and no closing day on the 2,582 orders that are neither (first code `CRTD` 1,912,
-    `REL` 669, `LKD` 1), 320 of them later than 2026-10-13, up to 2027-11-18. Which closed orders
-    are completed stays the definition of [reference/codes.md](reference/codes.md).
+    `REL` 669, `LKD` 1), 320 of them later than 2026-10-13, up to 2027-11-18. Which of the three
+    are closed orders is Sergey's reading, below.
   - What it means for B4 (plant 32, orders closed in Q2 2026): 357 orders with `TECO`, median 49
     days — the key and every folder answer; none with `CMPL` alone; 2 with `CMPL` and `NCMP`, which
     make 359 with the same median, 49; the 24 orders that are neither and carry a Q2 `closed_on` stay
-    out under both texts. The recorded answers hold for completed orders; counting the orders closed
-    without the work done moves the count to 359 and not the median. Whether "orders closed"
-    includes them is a meaning left to Sergey; the B4 row above stays as recorded.
+    out under every text. By Sergey's reading below, orders closed are completed orders and the 2 are
+    closed without execution, so B4's key, 357, is confirmed and does not move; the B4 row above
+    stays as recorded.
   - [identity.md](identity.md) said Zeteo turns the criteria into "one SQL query", while
     [rules.md](rules.md) asks for the other reading's number too; it now says one query for each
     reading.
@@ -394,8 +394,7 @@ electrical locations, "being executed" as the SAP in-process status — the two 
     fails when a document and the data disagree.
 
   Effect on the recorded answers: none of the five reads `closed_on` or a stray `*`. Of the thirty,
-  B4 would move its count and not its median, as above, under the reading that counts orders closed
-  without the work done; two of the folder's three B9 answers (Sonnet, Opus) cite `closed_on` as a
+  B4 does not move, by Sergey's reading of a closed order below; two of the folder's three B9 answers (Sonnet, Opus) cite `closed_on` as a
   closing day on `TECO` orders only, which does not change their verdict, that the question cannot
   be answered. Nothing else reads what changed.
 - **After the unseen run, because of A3 and A9:** four decisions of Sergey's on 2026-10-13, given
@@ -403,7 +402,8 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   - "Electrical" for a plant is its department plant with the letter `E`: electrical notifications
     of plant 65 are `plant = '65E'`; "electrical" alone is that, not the discipline letter `E` of a
     location ([reference/keys.md § Plant](reference/keys.md#plant), with a pointer in
-    [rules.md](rules.md)). A9's key, 171, was already this reading.
+    [rules.md](rules.md)) — the last part replaced by the next decision, below. A9's key, 171, was
+    already this reading.
   - When the system status and the user status disagree about the current state, the system status
     wins ([reference/codes.md](reference/codes.md), under the user status; pointer in
     [rules.md](rules.md)).
@@ -420,6 +420,24 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   as A9's key was set after the runs; every A3 answer of both arms gave a number and is regraded ✗
   (§ Thirty questions the author did not write). The folder now states the reading A9's key holds;
   its A9 answers, which read the discipline letter, stay as recorded. No other key moves.
+- **After the unseen run, two more readings of Sergey's** on 2026-10-13. No answer was re-run on
+  them.
+  - A closed order is a completed order — `TECO`, or `CMPL` without `NCMP` — and "orders closed" in
+    a period counts only these. `CMPL` with `NCMP` is closed without execution, a category of its
+    own, neither closed nor completed, reported apart when it matters. `closed_on` stays a real day
+    on all three groups. [reference/codes.md](reference/codes.md), [rules.md](rules.md),
+    [reference/zw38.md](reference/zw38.md) and [reference/keys.md § Dates](reference/keys.md#dates)
+    follow; the last two had called `CMPL` with `NCMP` closed orders.
+  - The discipline `E` of a functional location means electrical equipment. "Electrical" for a
+    plant's notifications stays the department plant, `65E` for plant 65; "electrical equipment" is
+    the location's discipline `E` ([reference/keys.md](reference/keys.md), with the pointer in
+    [rules.md](rules.md)). The earlier sentence that "electrical" alone was never the discipline
+    letter is replaced.
+
+  Effect on the recorded answers: none of the five reads a closed order or a discipline. Of the
+  thirty, B4's key, 357, is confirmed and does not move: 2 orders of plant 32 with a Q2 `closed_on`
+  are closed without execution and stay out. A9 asks for electrical notifications, so its key stays
+  `65E`, 171. No other key moves.
 
 ## What this says, and what it does not
 

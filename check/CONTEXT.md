@@ -7,7 +7,7 @@ type: contract
 
 One job: recompute the numbers its registry lists — the stated counts of
 [`reference/`](../reference/CONTEXT.md), [`data/CONTEXT.md`](../data/CONTEXT.md) and README § The
-data, the worked examples, and the `closed_on` paragraph of [`results.md`](../results.md) — and fail when a document and the data disagree. A new number written into a
+data, the worked examples, and the `closed_on` and B4 numbers of [`results.md`](../results.md) — and fail when a document and the data disagree. A new number written into a
 document is checked only once a row for it is added to the registry. Added after the run on the thirty unseen questions; no arm was run
 with it, and no arm ever sees it.
 
@@ -21,7 +21,7 @@ that runs and records the arms.
 
 - The documents, from the repository root or from `--root DIR`: [../examples.md](../examples.md),
   every file of [../reference/](../reference/CONTEXT.md), [../data/CONTEXT.md](../data/CONTEXT.md),
-  [../README.md](../README.md) § The data, the `closed_on` paragraph of
+  [../README.md](../README.md) § The data, the `closed_on` and B4 numbers of
   [../results.md](../results.md) § What changed, and for the repeated rules also
   [../CLAUDE.md](../CLAUDE.md), [../identity.md](../identity.md) and [../rules.md](../rules.md).
 - The data, always from this repository's [../data/](../data/CONTEXT.md), loaded by `connect()` of
@@ -58,7 +58,8 @@ A query that fails is a failure, reported on its own line; the run goes on.
 [test_check.py](test_check.py) copies the documents into a temporary directory, changes one thing
 — a number of an example, the SQL of an example, a count of
 [`codes.md`](../reference/codes.md), the completed-order rule in [`examples.md`](../examples.md),
-the plant rule in [`keys.md`](../reference/keys.md) widened or deleted, a digit added in front of a
+the plant rule in [`keys.md`](../reference/keys.md) widened or deleted, closed orders in
+[`zw38.md`](../reference/zw38.md) widened to `CMPL` with `NCMP`, a digit added in front of a
 stated count, an eleventh example — and requires the check to fail on the copy, as it requires the
 unchanged copy to pass. It also feeds the check registry rows the data contradicts (a whole number,
 a decimal, a date, a NULL, a false statement, two rows for one phrase), a query that errors, and

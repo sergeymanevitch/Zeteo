@@ -14,7 +14,7 @@ type: reference
 | `D` | `D` | no meaning; every location starts with it |
 | plant | `88` | the plant |
 | area | `02` | an area inside the plant |
-| discipline | `M` | `M` mechanical, `E` electrical, `I` instrumentation, `G` gas, `S` safety, `C` IT, `K` general, `N` HVAC and air conditioning, `P` piping; the owner's work centres on `M` |
+| discipline | `M` | `M` mechanical, `E` electrical equipment, `I` instrumentation, `G` gas, `S` safety, `C` IT, `K` general, `N` HVAC and air conditioning, `P` piping; the owner's work centres on `M` |
 | equipment | `00700` | the equipment number: five digits, or four digits and a letter (`0261F`) |
 | unit | `/03` | the unit in a row of that equipment: `/03` is the third |
 
@@ -36,10 +36,10 @@ whole plant, 589 of them `D-65`),
 On notifications a letter after the digits names a department, not a plant: `E` electrical, `I`
 instrumentation. `65E` and `65I` are synthetic plants that say which department is in charge of
 work done in plant 65. They are **not** counted as plant 65: a question about plant 65 means the
-rows whose `plant` is `65` and nothing else (Sergey, 2026-10-12). "Electrical" for a plant means
-its department plant with the letter `E`: electrical notifications of plant 65 are
-`plant = '65E'` in `ZIW28_KG`. "Electrical" alone means the department plant, not the discipline
-letter `E` of a functional location (Sergey, 2026-10-13). Plants are numbers: `010` is
+rows whose `plant` is `65` and nothing else (Sergey, 2026-10-12). "Electrical" for a plant's
+notifications means its department plant with the letter `E`: electrical notifications of plant 65 are
+`plant = '65E'` in `ZIW28_KG` (Sergey, 2026-10-13). "Electrical equipment" is the discipline
+letter `E` of a functional location, its 4th segment (Sergey, 2026-10-13). Plants are numbers: `010` is
 plant 10 and `1` is plant 01, so compare them as integers. For plant 65:
 
     try_cast(plant AS INTEGER) = 65                                                              -- ZIW28_KG
@@ -112,7 +112,7 @@ then completed — completed as [codes.md](codes.md) defines it under the system
 | released | `released_on` |
 | when work actually started | `actual_start_date` (empty on most orders; say how many have none) |
 | actually ended | `actual_end_date` — it equals `scheduled_end_date` when the order was done on its scheduled day, which is 70,238 of 70,241 rows |
-| closed, technically completed | `closed_on`, the closing day on closed orders — `TECO`, or `CMPL` with or without `NCMP` — and no closing day on the 2,582 others ([zw38.md](zw38.md)); which closed orders are completed: [codes.md](codes.md), under the system status |
+| closed, technically completed | `closed_on`, on closed orders: `TECO`, or `CMPL` without `NCMP` ([codes.md](codes.md), under the system status); `CMPL` with `NCMP` is closed without execution, not closed, and reported apart when it matters (Sergey, 2026-10-13), and `closed_on` holds the day of that too; no closing day on the 2,582 orders with neither `TECO` nor `CMPL` ([zw38.md](zw38.md)) |
 
 `created_on` runs from 2018-05-03 to 2026-10-08. `actual_start_date_2` is described in
 [zw38.md](zw38.md) and used only when named.

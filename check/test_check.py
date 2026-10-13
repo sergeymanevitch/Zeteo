@@ -89,6 +89,10 @@ class CheckTest(unittest.TestCase):
         failures = self.assertFails("reference/codes.md", "phrase not found", "| 70,430 |")
         self.assertEqual(len(failures), 1, failures)
 
+    def test_closed_orders_widened_in_zw38(self):
+        self.change("reference/zw38.md", "`TECO` or `CMPL` without `NCMP`", "`TECO` or `CMPL` with or without `NCMP`")
+        self.assertFails("reference/zw38.md", "phrase not found", "closed orders")
+
     def test_completed_order_changed_in_examples(self):
         self.change("examples.md", "AND NOT regexp_matches(system_status, '\\bNCMP\\b'))) AS completed",
                     "AND NOT regexp_matches(system_status, '\\bNCMP\\b')\n   OR false)) AS completed")

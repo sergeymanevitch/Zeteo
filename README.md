@@ -103,8 +103,8 @@ Things to know before you compare:
   sessions alone — `git diff` shows the old against the new.
 - The current folder is round 4's plus the code meanings and decisions added after it and the
   fixes and readings made after the unseen run, which move none of the five answers; of the thirty,
-  B4 could move its count and not its median under one reading, and the folder now states the
-  readings A3's and A9's expected answers hold ([results.md](results.md), What changed). To re-run a round exactly, check out the commit it names (`679d0fb`, `b35316d`,
+  B4 does not move by Sergey's reading of a closed order, and the folder now states the readings
+  A3's and A9's expected answers hold ([results.md](results.md), What changed). To re-run a round exactly, check out the commit it names (`679d0fb`, `b35316d`,
   `aa8e82a` or `d85d39b`; `236cc9f` for the thirty unseen questions) in a separate worktree and use
   the kit from there.
 - Four of the thirty unseen questions are counted from the day they are asked: B5 ("last month"),

@@ -139,7 +139,7 @@ FACTS = [
      "WHERE reference_date > DATE '2100-01-01'"),
     ("reference/keys.md", "which is {70,238} of {70,241} rows",
      "SELECT count(*) FILTER (WHERE actual_end_date = scheduled_end_date), count(*) FROM ZW38_KG"),
-    ("reference/keys.md", "and no closing day on the {2,582} others",
+    ("reference/keys.md", "no closing day on the {2,582} orders with neither `TECO` nor `CMPL`",
      _count("ZW38_KG", f"NOT {TECO} AND NOT {CMPL}")),
     ("reference/keys.md", "`created_on` runs from {2018-05-03} to {2026-10-08}",
      "SELECT min(created_on), max(created_on) FROM ZW38_KG"),
@@ -289,8 +289,12 @@ FACTS = [
                           "2026-10-13, up to {2027-11-18}",
      f"SELECT count(*), count(*) FILTER (WHERE closed_on > DATE '2026-10-13'), max(closed_on) FROM ZW38_KG "
      f"WHERE NOT {TECO} AND NOT {CMPL}"),
-    ("reference/zw38.md", "the closing day on closed orders: `TECO`, or `CMPL` with or without `NCMP`",
-     f"SELECT count(*) = 0 FROM ZW38_KG WHERE ({TECO} OR {CMPL}) "
+    ("reference/zw38.md", "the closing day on closed orders, `TECO` or `CMPL` without `NCMP`",
+     f"SELECT count(*) = 0 FROM ZW38_KG WHERE ({TECO} OR ({CMPL} AND NOT {NCMP})) "
+     "AND (closed_on IS NULL OR closed_on > DATE '2026-10-13')"),
+    ("reference/zw38.md", "on `CMPL` with `NCMP`, which are closed without execution and not closed orders, "
+                          "the day it was closed without execution",
+     f"SELECT count(*) = 0 FROM ZW38_KG WHERE {CMPL} AND {NCMP} "
      "AND (closed_on IS NULL OR closed_on > DATE '2026-10-13')"),
     ("reference/zw38.md", "the day the order was released; empty on {6,936} rows",
      _count("ZW38_KG", "released_on IS NULL")),
@@ -339,7 +343,7 @@ B4 = "plant = '32' AND closed_on >= DATE '2026-04-01' AND closed_on < DATE '2026
 MEDIAN = "median(date_diff('day', created_on, closed_on))"
 FACTS += [
     ("results.md", "a value running into the future on the {7,748} others", _count("ZW38_KG", f"NOT {TECO}")),
-    ("results.md", "closed order — `TECO` {62,493}, `CMPL` with `NCMP` {5,024}, `CMPL` alone {142}",
+    ("results.md", "three groups of orders — `TECO` {62,493}, `CMPL` with `NCMP` {5,024}, `CMPL` alone {142}",
      _counts(("ZW38_KG", TECO), ("ZW38_KG", f"{CMPL} AND {NCMP}"), ("ZW38_KG", f"{CMPL} AND NOT {NCMP}"))),
     ("results.md", "`CMPL` alone 142, none later than 2026-10-13",
      f"SELECT count(*) = 0 FROM ZW38_KG WHERE ({TECO} OR {CMPL}) AND closed_on > DATE '2026-10-13'"),
@@ -359,8 +363,10 @@ FACTS += [
      f"WHERE {B4} AND ({TECO} OR {CMPL})"),
     ("results.md", "the {24} orders that are neither and carry a Q2 `closed_on`",
      _count("ZW38_KG", f"{B4} AND NOT {TECO} AND NOT {CMPL}")),
-    ("results.md", "moves the count to {359} and not the median",
-     f"SELECT count(*) FROM ZW38_KG WHERE {B4} AND ({TECO} OR {CMPL})"),
+    ("results.md", "B4's key, {357}, is confirmed and does not move: {2} orders of plant 32 with a Q2 "
+                   "`closed_on` are closed without execution",
+     f"SELECT count(*) FILTER (WHERE {TECO} OR ({CMPL} AND NOT {NCMP})), "
+     f"count(*) FILTER (WHERE {CMPL} AND {NCMP}) FROM ZW38_KG WHERE {B4}"),
 ]
 
 # --- (c) the repeated SQL rules ----------------------------------------------------------------

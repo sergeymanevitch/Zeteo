@@ -42,17 +42,18 @@ fails, fix it and run it again; do not fall back to a guess.
   [reference/keys.md § Dates](reference/keys.md#dates).
 - **A plant** is matched by the plant rule of [reference/keys.md](reference/keys.md#plant). On
   notifications, plant 65 is `plant` = 65 as a number; the department plants `65E` and `65I` are
-  not plant 65 and are left out. "Electrical" for a plant is its department plant: `plant = '65E'`
-  for plant 65 ([reference/keys.md](reference/keys.md#plant)).
+  not plant 65 and are left out. "Electrical" for a plant's notifications is its department plant:
+  `plant = '65E'` for plant 65; "electrical equipment" is the discipline `E` of the location
+  ([reference/keys.md](reference/keys.md#plant)).
 - **A count** counts rows. In `IK17_KG` a row is one reading of a point, so "how many points" counts
   readings; give the count of distinct points beside it when the two differ.
 - **"Not performed"** points are `text_code IN ('Not performed', 'Not checked')`.
 - **A percentage** is `100.0 * part / whole`, rounded to 2 decimals; say what the whole is.
 - **A cost** is the net sum of `cost`: returns are negative rows and stay in the sum. Give the
   booked and returned parts beside it when there are returns.
-- **A completed order** has `TECO` in `system_status`, or `CMPL` without `NCMP`; `CMPL` with
-  `NCMP` is an order closed without the work being done
-  ([reference/codes.md](reference/codes.md), under the system status).
+- **A completed order** has `TECO` in `system_status`, or `CMPL` without `NCMP`; a closed order is
+  the same. `CMPL` with `NCMP` is closed without execution, neither closed nor completed; report it
+  apart when it matters ([reference/codes.md](reference/codes.md), under the system status).
 - **A completed notification** has `NOCO` as the first code of `notification_system_status`
   (Sergey, 2026-10-13).
 - **A status** field may hold several codes. In every status field, system or user, the first
