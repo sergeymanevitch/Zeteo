@@ -33,6 +33,13 @@ fails, fix it and run it again; do not fall back to a guess.
   names a period and no event, the default is `required_start_date` for notifications, `created_on`
   for orders and readings, `date` for material cost. A day is `col = DATE '2026-10-05'`; a month a
   half-open range: `col >= DATE '2026-05-01' AND col < DATE '2026-06-01'`.
+- **A relative period** — this year, last month, these months against the same months last year —
+  is read as the user names it, counted from today's date, and compared like with like: years with
+  years, months with the same months (Sergey, 2026-10-13). When the period is not over, or the
+  table's dates end before it does, say so and give the last date the table holds.
+- **A duration** is in calendar days, the plant works around the clock (Sergey, 2026-10-13):
+  `date_diff('day', start, end)` between the two dates the question names, read by
+  [reference/keys.md § Dates](reference/keys.md#dates).
 - **A plant** is matched by the plant rule of [reference/keys.md](reference/keys.md#plant). On
   notifications, plant 65 is `plant` = 65 as a number; the department plants `65E` and `65I` are
   not plant 65 and are left out.
@@ -45,6 +52,8 @@ fails, fix it and run it again; do not fall back to a guess.
 - **A completed order** has `TECO` in `system_status`, or `CMPL` without `NCMP`; `CMPL` with
   `NCMP` is an order closed without the work being done
   ([reference/codes.md](reference/codes.md), under the system status).
+- **A completed notification** has `NOCO` as the first code of `notification_system_status`
+  (Sergey, 2026-10-13).
 - **A status** field may hold several codes. In every status field, system or user, the first
   code from the left is the current status and the rest are history: "orders released" reads the
   first code, "orders delayed for lack of people" looks for `MSCP` anywhere

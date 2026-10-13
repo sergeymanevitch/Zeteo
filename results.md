@@ -247,6 +247,10 @@ start-up. Cost is the `totalCostUSD` Claude Code recorded.
   sub-plants of one plant, for now treated separately. Effect on the five answers: none by query —
   no question reads a system status, a discipline or those plants, and Q5's user status holds one
   code. No round was run on it.
+- **After the analysis of what can be asked, not because of an answer:** from Sergey on
+  2026-10-13, a completed notification (`NOCO` first), durations in calendar days, relative periods
+  read as the user names them and compared like with like. Effect on the five answers: none — no
+  question asks about any of them. No round was run on it.
 
 ## What this says, and what it does not
 

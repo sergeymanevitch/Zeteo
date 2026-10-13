@@ -114,6 +114,11 @@ anywhere in the field, `regexp_matches(system_status, '\bMSCP\b')`. The first co
 `NOPR`, `NOPO`, `ATCO`, `OSNO` or `DLFL` on notifications, and `TECO`, `CMPL`, `CRTD`, `REL` or
 `LKD` on orders.
 
+**A completed notification** (Sergey, 2026-10-13) has `NOCO` as the first code of
+`notification_system_status`: 378,589 notifications.
+
+    regexp_extract(notification_system_status, '^\s*([^ ,]+)', 1) = 'NOCO'
+
 **A completed order** (Sergey, 2026-10-13) has `TECO` in `ZW38_KG.system_status`, or `CMPL`
 without `NCMP`. An order with both `CMPL` and `NCMP` was closed without the work being done and is
 not completed. In the data: 62,493 orders with `TECO`, 5,024 with `CMPL` and `NCMP`, 142 with
