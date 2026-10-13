@@ -24,7 +24,7 @@ A: 57 opened (`created_on`); 39 by `required_start_date`
 ## A3
 
 Q: Of the notifications plant 64 opened in July 2026, how many are being executed right now?
-A: 5 (`EXE` is the current user status); 130 have `EXE` anywhere in it
+A: Cannot be answered from this data: what is being executed needs the order operations of SAP transaction IW37N, which are not in the four tables; `EXE` first is cleared for execution, not being executed — Sergey's reading, given after both arms ran (2026-10-13).
 
 ## A4
 
