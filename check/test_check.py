@@ -89,6 +89,10 @@ class CheckTest(unittest.TestCase):
         failures = self.assertFails("reference/codes.md", "phrase not found", "| 70,430 |")
         self.assertEqual(len(failures), 1, failures)
 
+    def test_work_center_trade_changed_in_keys(self):
+        self.change("reference/keys.md", "(`1321`, `5621`, `8821` in `ZW38_KG`)", "(`1321`, `5621`, `8811` in `ZW38_KG`)")
+        self.assertFails("reference/keys.md", "phrase not found", "`8821`")
+
     def test_closed_orders_widened_in_zw38(self):
         self.change("reference/zw38.md", "`TECO` or `CMPL` without `NCMP`", "`TECO` or `CMPL` with or without `NCMP`")
         self.assertFails("reference/zw38.md", "phrase not found", "closed orders")

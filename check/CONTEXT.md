@@ -59,7 +59,7 @@ A query that fails is a failure, reported on its own line; the run goes on.
 — a number of an example, the SQL of an example, a count of
 [`codes.md`](../reference/codes.md), the completed-order rule in [`examples.md`](../examples.md),
 the plant rule in [`keys.md`](../reference/keys.md) widened or deleted, closed orders in
-[`zw38.md`](../reference/zw38.md) widened to `CMPL` with `NCMP`, a digit added in front of a
+[`zw38.md`](../reference/zw38.md) widened to `CMPL` with `NCMP`, an electrical work center in `keys.md` changed, a digit added in front of a
 stated count, an eleventh example — and requires the check to fail on the copy, as it requires the
 unchanged copy to pass. It also feeds the check registry rows the data contradicts (a whole number,
 a decimal, a date, a NULL, a false statement, two rows for one phrase), a query that errors, and

@@ -58,6 +58,23 @@ too (Sergey). `ZW38_KG` has plants `13`, `32`, `43`, `56`, `64`, `65`, `88` and 
 `main_work_center` begins with the plant's digits (`4389` in plant 43), and work center `8811`
 serves both `88` and `8100`, sub-plants of one plant.
 
+The last two digits of a work center name its trade: `21` electrical, `31` instrumentation
+(controllers) (Sergey, 2026-10-13). Orders carry no department plant, so a plant's electrical orders
+are its orders whose `main_work_center` ends in `21` (`1321`, `5621`, `8821` in `ZW38_KG`) and its
+instrumentation orders those ending in `31` (`8831`). Only plants 13, 56 and 88 have such an
+electrical work center among their orders, and only 88 an instrumentation one; for the other plants
+the count is 0. On notifications "electrical" stays the department plant, above. The department
+plants mostly carry the matching work center: of the notifications of `65E`, 6,223 of 6,494 have
+work center `6521`; `64E` 853 of 880 `6421`; `43E` 187 of 224 `4321`; `32E` 171 of 230 `3221`;
+`88E` 7 of 16 `8821`; of `65I`, 3,890 of 4,087 have `6531`; `43I` 552 of 604 `4331`; `32I` 356 of
+463 `3231`; `64I` 177 of 206 `6431`; `88I` 16 of 26 `8831`. Not the other way: work center `6521`
+is on 10,141 notifications, 3,503 of them on plant `65`, so on notifications read the department
+plant, not the work center.
+
+Readings (`IK17_KG`) and material costs (`ZK22_KG`) carry neither a department plant nor a work
+center, so on them "electrical" is the discipline `E` of the functional location, its 4th segment
+(`D-65-02-E-…`) (Sergey, 2026-10-13).
+
 ## Joins
 
 - `functional_location` is shared by `IK17_KG`, `ZIW28_KG` and `ZK22_KG`: the way to put

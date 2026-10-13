@@ -123,6 +123,27 @@ FACTS = [
      "AND (SELECT count(*) FROM ZW38_KG WHERE main_work_center = '4389' AND plant <> '43') = 0 "
      "AND (SELECT list(DISTINCT plant ORDER BY plant) FROM ZW38_KG WHERE main_work_center = '8811') "
      "= ['8100', '88']"),
+    ("reference/keys.md", "ends in `21` (`1321`, `5621`, `8821` in `ZW38_KG`) and its instrumentation orders those "
+                          "ending in `31` (`8831`)",
+     "SELECT (SELECT list(DISTINCT main_work_center ORDER BY main_work_center) FROM ZW38_KG "
+     "WHERE main_work_center LIKE '%21') = ['1321', '5621', '8821'] "
+     "AND (SELECT list(DISTINCT main_work_center ORDER BY main_work_center) FROM ZW38_KG "
+     "WHERE main_work_center LIKE '%31') = ['8831']"),
+    ("reference/keys.md", "Only plants 13, 56 and 88 have such an electrical work center among their orders, and only "
+                          "88 an instrumentation one",
+     "SELECT (SELECT list(DISTINCT plant ORDER BY plant) FROM ZW38_KG WHERE main_work_center LIKE '%21') "
+     "= ['13', '56', '88'] AND (SELECT list(DISTINCT plant) FROM ZW38_KG WHERE main_work_center LIKE '%31') = ['88']"),
+    ("reference/keys.md", "of the notifications of `65E`, {6,223} of {6,494} have work center `6521`; `64E` {853} of "
+                          "{880} `6421`; `43E` {187} of {224} `4321`; `32E` {171} of {230} `3221`; `88E` {7} of {16} "
+                          "`8821`; of `65I`, {3,890} of {4,087} have `6531`; `43I` {552} of {604} `4331`; `32I` {356} "
+                          "of {463} `3231`; `64I` {177} of {206} `6431`; `88I` {16} of {26} `8831`",
+     "SELECT " + ", ".join(
+         f"count(*) FILTER (WHERE plant = '{p}' AND main_work_center = '{w}'), count(*) FILTER (WHERE plant = '{p}')"
+         for p, w in [("65E", "6521"), ("64E", "6421"), ("43E", "4321"), ("32E", "3221"), ("88E", "8821"),
+                      ("65I", "6531"), ("43I", "4331"), ("32I", "3231"), ("64I", "6431"), ("88I", "8831")])
+     + " FROM ZIW28_KG"),
+    ("reference/keys.md", "work center `6521` is on {10,141} notifications, {3,503} of them on plant `65`",
+     "SELECT count(*), count(*) FILTER (WHERE plant = '65') FROM ZIW28_KG WHERE main_work_center = '6521'"),
     ("reference/keys.md", "`\"order\"` links `IK17_KG` and `ZK22_KG` for {134} orders only",
      'SELECT count(DISTINCT i."order") FROM IK17_KG i JOIN ZK22_KG z ON i."order" = z."order"'),
     ("reference/keys.md", "`required_start_date` runs from {2008-05-01} to {2028-12-21}; {3} rows before 2000 "

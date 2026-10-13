@@ -438,6 +438,26 @@ electrical locations, "being executed" as the SAP in-process status — the two 
   thirty, B4's key, 357, is confirmed and does not move: 2 orders of plant 32 with a Q2 `closed_on`
   are closed without execution and stay out. A9 asks for electrical notifications, so its key stays
   `65E`, 171. No other key moves.
+- **After the unseen run, one more reading of Sergey's** on 2026-10-13: the last two digits of a
+  work center name its trade, `21` electrical and `31` instrumentation (controllers). Orders carry
+  no department plant, so a plant's electrical orders are those whose `main_work_center` ends in
+  `21`, instrumentation `31`; on notifications "electrical" stays the department plant, and the
+  department plants' work centers agree, measured
+  ([reference/keys.md § Plant](reference/keys.md#plant), [reference/zw38.md](reference/zw38.md),
+  [rules.md](rules.md)). No answer was re-run. Effect on the recorded answers: none — no question of
+  the five or the thirty asks for electrical or instrumentation orders, and A9 asks for
+  notifications, so its key stays `65E`, 171.
+- **After the unseen run, two more decisions of Sergey's** on 2026-10-13. No answer was re-run on them.
+  - On readings and material costs "electrical" is the discipline `E` of the functional location,
+    its 4th segment: those tables carry neither a department plant nor a work center
+    ([reference/keys.md § Plant](reference/keys.md#plant), pointer in [rules.md](rules.md)). The
+    folder now reads "electrical" per table: notifications the department plant `<plant>E`, orders
+    a work center ending `21`, readings and costs the location's discipline `E`.
+  - Step 5 of [rules.md](rules.md) said "Write one SQL query"; it now says one query for each
+    reading the answer gives, as [identity.md](identity.md) does.
+
+  Effect on the recorded answers: none — no question of the five or the thirty asks for electrical
+  readings or costs, and step 5 changes no number, only how many queries an answer runs.
 
 ## What this says, and what it does not
 
